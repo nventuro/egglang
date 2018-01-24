@@ -1,0 +1,19 @@
+{
+  "name": "egglang",
+  "version": "1.0.0",
+  "description": "Egg programming language.",
+  "main": "src/egg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nventuro/egglang.git"
+  },
+  "author": "Nicolás Venturo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nventuro/egglang/issues"
+  },
+  "homepage": "https://github.com/nventuro/egglang#readme"
+}
