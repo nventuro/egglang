@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node src/egg.js "$(cat $1)"
+node src/egg.js $@
