@@ -2,10 +2,15 @@ const parser = require("./parser.js");
 const evaluator = require("./evaluator.js");
 
 exports.run = _run;
+exports.newEnv = _newEnv;
 
-function _run(program) {
-  var env = Object.create(_topEnv);
+function _run(program, env) {
+  env = env || _newEnv();
   return evaluator.evaluate(parser.parse(program), env);
+}
+
+function _newEnv() {
+  return Object.create(_topEnv);
 }
 
 var _topEnv = Object.create(null);
