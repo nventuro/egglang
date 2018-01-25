@@ -6,7 +6,7 @@ if (require.main === module) {
   var args = process.argv.slice(2); // Remove the Node call to this program from argv
 
   if (args.length == 0) {
-    REPL();
+    doREPL();
 
   } else if (args.length == 1) {
     runFile(args[0]);
@@ -16,8 +16,10 @@ if (require.main === module) {
   }
 }
 
-function REPL() {
-  console.log("Egg 1.0.0\n");
+function doREPL() {
+  // To implement a REPL, we need an environment that
+  // will persist through multiple runtime.run calls
+  var replEnv = runtime.newEnv();
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -25,18 +27,20 @@ function REPL() {
     prompt: "> "
   });
 
-  rl.prompt();
-
-  var replEnv = runtime.newEnv();
-
   rl.on('line', (line) => {
-    console.log(runtime.run(line, replEnv));
+    console.log(line);
+    if (/\S/.test(line)) { // Only parse non-empty lines
+      console.log(runtime.run(line, replEnv));
+    }
     rl.prompt();
 
   }).on('close', () => {
     console.log('Exiting');
     process.exit(0);
   });
+
+  console.log("Egg 1.0.0\n");
+  rl.prompt();
 }
 
 function runFile(filename) {
