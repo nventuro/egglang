@@ -100,7 +100,9 @@ _specialForms["fun"] = function(args, env) {
       throw new TypeError("Wrong number of arguments");
     }
 
-    // A local environment is setup for the execution of the function
+    // The local environment where the function will be evaluated
+    // is created from the current environment, thereby allowing
+    // closures to be created
     var localEnv = Object.create(env);
     for (var i = 0; i < arguments.length; i++) {
       localEnv[argNames[i]] = arguments[i];
