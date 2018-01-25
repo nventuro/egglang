@@ -30,7 +30,12 @@ function doREPL() {
   rl.on('line', (line) => {
     console.log(line);
     if (/\S/.test(line)) { // Only parse non-empty lines
-      console.log(runtime.run(line, replEnv));
+      try {
+        console.log(runtime.run(line, replEnv));
+      }
+      catch (error) {
+        console.error(error);
+      }
     }
     rl.prompt();
 
