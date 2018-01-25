@@ -69,3 +69,5 @@ function _parseApply(expr, program) {
 function _removeIgnored(string) {
   return string.replace(/(\s|#.*)*/g, ""); // Whitespace is ignored, comments start with '#' and end with a newline
 }
+
+exports._removeIgnored = _removeIgnored; // Hacky: to allow unit testing
