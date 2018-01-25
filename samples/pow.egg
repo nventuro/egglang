@@ -1,6 +1,9 @@
+# Calculates the 10th power of 2
+
 do(
-  define(pow, fun(base, exp,
+  define(pow, fun(base, exp, # Recursive power implementation
     if(==(exp, 0),
-      1,
-      *(base, pow(base, -(exp, 1)))))),
+      1, # Base case
+      *(base, pow(base, -(exp, 1)))))), # Recursive call
+
   print(pow(2, 10)))
