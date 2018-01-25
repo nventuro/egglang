@@ -1,0 +1,16 @@
+# Prints the first 10 digits of the Fibonacci sequence
+
+do(
+  define(fibo, fun(n, # Recursive definition
+    if(==(n, 0),
+      0, # fibo(0) == 0
+
+    if(==(n, 1),
+      1, # fibo(1) == 1
+
+    +(fibo(-(n, 1)), fibo(-(n, 2))))))), # fibo(n) == fibo(n-1) + fibo(n-2)
+
+  define(count, 0),
+  while(<(count, 10), do(
+    print(fibo(count)),
+    define(count, +(count, 1)))))
