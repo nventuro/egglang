@@ -1,4 +1,7 @@
-# egglang
+# egglang: the Egg programming language
+
+[![Build Status](https://travis-ci.org/nventuro/egglang.svg?branch=master)](https://travis-ci.org/nventuro/egglang)
+
 A JavaScript implementation of the Egg programming language, as described by [Marijn Haverbeke](https://marijnhaverbeke.nl/) in [his book](http://eloquentjavascript.net/11_language.html).
 
 ## Usage
