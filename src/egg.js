@@ -5,10 +5,10 @@ const fs = require("fs");
 if (require.main === module) {
   var args = process.argv.slice(2); // Remove the Node call to this program from argv
 
-  if (args.length == 0) {
+  if (args.length === 0) {
     doREPL();
 
-  } else if (args.length == 1) {
+  } else if (args.length === 1) {
     runFile(args[0]);
 
   } else {

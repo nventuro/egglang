@@ -52,21 +52,21 @@ function _parseExpression(program) {
 
 function _parseApply(expr, program) {
   // Applications must start with an opening parenthesis
-  if (program[0] != "(") {
+  if (program[0] !== "(") {
     return {expr: expr, rest: program};
   }
 
   program = program.slice(1);
   expr = {type: "apply", operator: expr, args: []};
 
-  while (program[0] != ")") {
+  while (program[0] !== ")") {
     var arg = _parseExpression(program); // Recursively parse each argument
     expr.args.push(arg.expr);
     program = arg.rest;
 
-    if (program[0] == ",") { // More arguments remain
+    if (program[0] === ",") { // More arguments remain
       program = program.slice(1);
-    } else if (program[0] != ")") {
+    } else if (program[0] !== ")") {
       throw new SyntaxError("Expected ',' or ')'");
     }
   }

@@ -13,14 +13,14 @@ function _evaluate(expr, env) {
       }
 
     case "apply":
-      if (expr.operator.type == "word" && expr.operator.name in _specialForms) {
+      if (expr.operator.type === "word" && expr.operator.name in _specialForms) {
         // Special forms are not evaluated immediately, since some of their parts
         // may never be evaluated (like the not-taken branch of an if)
         return _specialForms[expr.operator.name](expr.args, env);
       }
 
       var op = _evaluate(expr.operator, env); // Retrieve the function from the environment
-      if (typeof op != "function") {
+      if (typeof op !== "function") {
         throw new TypeError("Applying a non-function");
       }
 
@@ -34,7 +34,7 @@ function _evaluate(expr, env) {
 var _specialForms = Object.create(null);
 
 _specialForms["if"] = function(args, env) {
-  if (args.length != 3) { // Egg's if is actually closer to a ternary operator, therefore both sides of the branch are required
+  if (args.length !== 3) { // Egg's if is actually closer to a ternary operator, therefore both sides of the branch are required
     throw new SyntaxError("Bad number of args to if");
   }
 
@@ -46,7 +46,7 @@ _specialForms["if"] = function(args, env) {
 };
 
 _specialForms["while"] = function(args, env) {
-  if (args.length != 2) {
+  if (args.length !== 2) {
     throw new SyntaxError("Bad number of args to while");
   }
 
@@ -69,7 +69,7 @@ _specialForms["do"] = function(args, env) {
 };
 
 _specialForms["define"] = function(args, env) {
-  if (args.length != 2 || args[0].type != "word") {
+  if (args.length !== 2 || args[0].type !== "word") {
     throw new SyntaxError("Bad use of define");
   }
 
@@ -87,7 +87,7 @@ _specialForms["fun"] = function(args, env) {
 
   // The first n-1 fun arguments are the function arguments
   var argNames = args.slice(0, args.length - 1).map(function(arg) {
-    if (arg.type != "word")
+    if (arg.type !== "word")
       throw new SyntaxError("Arg names must be words");
     return arg.name;
   });
@@ -96,7 +96,7 @@ _specialForms["fun"] = function(args, env) {
   var body = args[args.length - 1];
 
   return function() {
-    if (arguments.length != argNames.length) {
+    if (arguments.length !== argNames.length) {
       throw new TypeError("Wrong number of arguments");
     }
 
