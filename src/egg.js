@@ -28,7 +28,6 @@ function doREPL() {
   });
 
   rl.on('line', (line) => {
-    console.log(line);
     if (/\S/.test(line)) { // Only parse non-empty lines
       try {
         console.log(runtime.run(line, replEnv));
