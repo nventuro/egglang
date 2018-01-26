@@ -1,5 +1,3 @@
-exports.parse = _parse;
-
 function _parse(program) {
   program = _removeIgnored(program);
 
@@ -17,7 +15,6 @@ function _parseExpression(program) {
   var match, expr;
 
   // Literal strings:
-  //  * Multiline string support
   //  * No escape charaters
   //  * Double quotes ('"') are not allowed
   if (match = /^"([^"]*)"/.exec(program)) {
@@ -25,13 +22,13 @@ function _parseExpression(program) {
 
   // Numbers:
   //  * Only positive integers are supported
-  } else if (match = /^\d+\b/.exec(program)) {
+  } else if (match = /^[+-]?\d+\b/.exec(program)) {
     expr = {type: "value", value: Number(match[0])};
 
   // Names (variables, functions, keywords):
   //  * No special characters (parenthesis, comma or double quotes)
   //  * Must not start with a number
-  } else if (match = /^[^(),"]+/.exec(program)) {
+  } else if (match = /^[^\d(),"][^(),"]*/.exec(program)) {
     expr = {type: "word", name: match[0]};
 
   } else {
@@ -70,4 +67,5 @@ function _removeIgnored(string) {
   return string.replace(/(\s|#.*)*/g, ""); // Whitespace is ignored, comments start with '#' and end with a newline
 }
 
-exports._removeIgnored = _removeIgnored; // Hacky: to allow unit testing
+exports.parse = _parse;
+exports._removeIgnored = _removeIgnored;
