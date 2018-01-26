@@ -64,12 +64,10 @@ describe("Parser", () => {
       expect(parser.parse("abc()")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: []});
     });
     it("parses applications with different types of parameters", () => {
-      expect(parser.parse("abc(\"param\", 3, var)")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"},
-                                                                  args: [{type: "value", value: "param"}, {type: "value", value: 3}, {type: "word", "name": "var"}]});
+      expect(parser.parse("abc(\"param\", 3, var)")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: [{type: "value", value: "param"}, {type: "value", value: 3}, {type: "word", "name": "var"}]});
     });
     it("parses nested applications", () => {
-      expect(parser.parse("abc(def())")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"},
-                                                                  args: [{type: "apply", operator: {type: "word", "name": "def"}, args: []}]});
+      expect(parser.parse("abc(def())")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: [{type: "apply", operator: {type: "word", "name": "def"}, args: []}]});
     });
     it("parses applied applications", () => {
       expect(parser.parse("abc()()")).to.deep.equal({type: "apply", operator: {type: "apply", operator: {type: "word", name: "abc"}, args: []}, args: []});

@@ -1,0 +1,20 @@
+{
+    "env": {
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "key-spacing": ["error"],
+        "computed-property-spacing": ["error"],
+        "space-in-parens": ["error"],
+        "object-curly-spacing": ["error"],
+        "array-bracket-spacing": ["error"],
+        "indent": ["error", 2, {"SwitchCase": 1}],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"],
+        "no-console": "off"
+    }
+}

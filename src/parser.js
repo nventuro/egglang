@@ -12,26 +12,37 @@ function _parse(program) {
 }
 
 function _parseExpression(program) {
-  var match, expr;
+  var matchers = [
+    {
+      // Literal strings:
+      //  * No escape charaters
+      //  * Double quotes ('"') are not allowed
+      regex: /^"([^"]*)"/,
+      expr: (match) => {return {type: "value", value: match[1]};}
+    }, {
+      // Numbers:
+      //  * Only integers are supported
+      regex: /^[+-]?\d+\b/,
+      expr: (match) => {return {type: "value", value: Number(match[0])};}
+    }, {
+      // Names (variables, functions, keywords):
+      //  * No special characters (parenthesis, comma or double quotes)
+      //  * Must not start with a number
+      regex: /^[^\d(),"][^(),"]*/,
+      expr: (match) => {return {type: "word", name: match[0]};}
+    }
+  ];
 
-  // Literal strings:
-  //  * No escape charaters
-  //  * Double quotes ('"') are not allowed
-  if (match = /^"([^"]*)"/.exec(program)) {
-    expr = {type: "value", value: match[1]};
+  var expr, match;
+  matchers.some((matcher) => {
+    match = matcher.regex.exec(program);
+    if (match) {
+      expr = matcher.expr(match);
+      return true;
+    }
+  });
 
-  // Numbers:
-  //  * Only positive integers are supported
-  } else if (match = /^[+-]?\d+\b/.exec(program)) {
-    expr = {type: "value", value: Number(match[0])};
-
-  // Names (variables, functions, keywords):
-  //  * No special characters (parenthesis, comma or double quotes)
-  //  * Must not start with a number
-  } else if (match = /^[^\d(),"][^(),"]*/.exec(program)) {
-    expr = {type: "word", name: match[0]};
-
-  } else {
+  if (!expr) {
     throw new SyntaxError("Unexpected syntax: " + program);
   }
 

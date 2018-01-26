@@ -27,7 +27,7 @@ function doREPL() {
     prompt: "> "
   });
 
-  rl.on('line', (line) => {
+  rl.on("line", (line) => {
     if (/\S/.test(line)) { // Only parse non-empty lines
       try {
         console.log(runtime.run(line, replEnv));
@@ -38,8 +38,8 @@ function doREPL() {
     }
     rl.prompt();
 
-  }).on('close', () => {
-    console.log('Exiting');
+  }).on("close", () => {
+    console.log("Exiting");
     process.exit(0);
   });
 
