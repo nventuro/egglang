@@ -8,6 +8,7 @@
     "rules": {
         "key-spacing": ["error"],
         "computed-property-spacing": ["error"],
+        "no-whitespace-before-property": ["error"],
         "space-before-blocks": ["error"],
         "space-before-function-paren": ["error", "never"],
         "space-in-parens": ["error"],
