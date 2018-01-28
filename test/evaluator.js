@@ -2,11 +2,6 @@ const evaluator = require("../src/evaluator");
 const expect = require("chai").expect;
 
 describe("Evaluator", () => {
-  it("doesn't evaluate non-existent variables", () => {
-    var env = {};
-    expect(() => evaluator.evaluate({type: "word", name: "abc"}, env)).to.throw(ReferenceError);
-  });
-
   describe("Constants", () => {
     describe("Numeric", () => {
       it("correctly evaluates zero", () => {
@@ -71,7 +66,37 @@ describe("Evaluator", () => {
     });
   });
 
+  describe("Variables", () => {
+    it("doesn't evaluate non-existent variables", () => {
+      var env = {};
+      expect(() => evaluator.evaluate({type: "word", name: "abc"}, env)).to.throw(ReferenceError);
+    });
+    it("evaluates numeric variables", () => {
+      var env = {"abc": 5};
+      expect(evaluator.evaluate({type: "word", name: "abc"}, env)).to.deep.equal(5);
+    });
+    it("evaluates string variables", () => {
+      var env = {"abc": "def"};
+      expect(evaluator.evaluate({type: "word", name: "abc"}, env)).to.deep.equal("def");
+    });
+    it("evaluates boolean variables", () => {
+      var env = {"abc": true};
+      expect(evaluator.evaluate({type: "word", name: "abc"}, env)).to.deep.equal(true);
+    });
+  });
+
   describe("Define", () => {
+    it("takes only one variable", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "word", name: "def"}, {type: "value", value: 5}]})).to.throw(SyntaxError);
+    });
+    it("takes only one value", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}, {type: "value", value: 3}]})).to.throw(SyntaxError);
+    });
+    it("takes variables as values", () => {
+      var env = {"abc": 5};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "word", name: "abc"}]}, env);
+      expect(env["def"]).to.deep.equal(5);
+    });
     describe("Numeric", () => {
       it("stores numeric variables", () => {
         var env = {};
@@ -180,6 +205,24 @@ describe("Evaluator", () => {
 
       expect(env["count"]).to.deep.equal(0);
       expect(env["sum"]).to.deep.equal(15);
+    });
+  });
+
+  describe("Fun", () => {
+    it("creates simple functions", () => {
+      var env = {};
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "value", value: 5}]}, env)()).to.deep.equal(5);
+    });
+    it("functions can access the environment", () => {
+      var env = {"abc": 5};
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "abc"}]}, env)()).to.deep.equal(5);
+    });
+    it("creates closures", () => {
+      var env = {};
+      // (x) => (() => x)
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "x"},
+        {type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "x"}]}
+      ]}, env)(5)()).to.deep.equal(5);
     });
   });
 });
