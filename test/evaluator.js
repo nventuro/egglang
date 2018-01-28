@@ -2,6 +2,11 @@ const evaluator = require("../src/evaluator");
 const expect = require("chai").expect;
 
 describe("Evaluator", () => {
+  it("doesn't evaluate non-existent variables", () => {
+    var env = {};
+    expect(() => evaluator.evaluate({type: "word", name: "abc"}, env)).to.throw(ReferenceError);
+  });
+
   describe("Constants", () => {
     describe("Numeric", () => {
       it("correctly evaluates zero", () => {
@@ -47,7 +52,26 @@ describe("Evaluator", () => {
     });
   });
 
-  describe("Variables", () => {
+  describe("Functions", () => {
+    it("doesn't evaluate non-existent functions", () => {
+      var env = {};
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "abc"}, args: []}, env)).to.throw(ReferenceError);
+    });
+    it("doesn't evaluate non-functions", () => {
+      var env = {"abc": 5};
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "abc"}, args: []}, env)).to.throw(TypeError);
+    });
+    it("returns a value", () => {
+      var env = {"foo": () => 5};
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "foo"}, args: []}, env)).to.deep.equal(5);
+    });
+    it("evaluates nested functions", () => {
+      var env = {"foo": () => 5, "bar": (a) => 3 + a};
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "bar"}, args: [{type: "apply", operator: {type: "word", name: "foo"}, args: []}]}, env)).to.deep.equal(8);
+    });
+  });
+
+  describe("Define", () => {
     describe("Numeric", () => {
       it("stores numeric variables", () => {
         var env = {};
@@ -84,14 +108,9 @@ describe("Evaluator", () => {
         expect(env["abc"]).to.deep.equal(true);
       });
     });
-
-    it("doesn't access non-existent variables", () => {
-      var env = {};
-      expect(() => evaluator.evaluate({type: "word", name: "abc"}, env)).to.throw(ReferenceError);
-    });
   });
 
-  describe("Conditionals", () => {
+  describe("If", () => {
     it("evaluates the first expression when true", () => {
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: true}, {type: "value", value: 5}, {type: "value", value: -5}]})).to.deep.equal(5);
     });
@@ -100,6 +119,46 @@ describe("Evaluator", () => {
     });
     it("requires two expressions", () => {
       expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: false}, {type: "value", value: 5}]})).to.throw(SyntaxError);
+    });
+  });
+
+  describe("While", () => {
+    it("doesn't evaluate the body when false", () => {
+      var env = {};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}]}, env);
+      expect(env).not.to.have.property("abc");
+    });
+    it("evaluates the body until true", () => {
+      var env = {"count": 5, "sum": 0};
+      ["+", "-", ">"].forEach(function(op) {
+        env[op] = new Function("a, b", "return a " + op + " b;");
+      });
+
+      // while (count > 0) {sum += count, count -= 1}
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "apply", operator: {type: "word", name: ">"}, args: [{type: "word", name: "count"}, {type: "value", value: 0}]},
+        {type: "apply", operator: {type: "word", name: "do"}, args: [
+          {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "sum"}, {type: "apply", operator: {type: "word", name: "+"}, args: [
+            {type: "word", name: "sum"},
+            {type: "word", name: "count"}
+          ]}]},
+          {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "count"}, {type: "apply", operator: {type: "word", name: "-"}, args: [
+            {type: "word", name: "count"},
+            {type: "value", value: 1}
+          ]}]}
+        ]}]}, env);
+
+      expect(env["count"]).to.deep.equal(0);
+      expect(env["sum"]).to.deep.equal(15);
+    });
+    it("requires a body", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false}]})).to.throw(SyntaxError);
+    });
+    it("doesn't take multiple bodies", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "value", value: -5}]}]}))
+        .to.throw(SyntaxError);
     });
   });
 });
