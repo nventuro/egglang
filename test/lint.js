@@ -12,7 +12,7 @@ const options = {
   strict: true,
   timeout: 5000,
   slow: 1000,
-  contextName: "eslint"
+  contextName: "ESLint"
 };
 
 lint(paths, options);
