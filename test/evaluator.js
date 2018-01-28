@@ -224,5 +224,19 @@ describe("Evaluator", () => {
         {type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "x"}]}
       ]}, env)(5)()).to.deep.equal(5);
     });
+    it("creates a local environment", () => {
+      var env = {};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
+      ]}, env)();
+      expect(env).not.to.have.property("abc");
+    });
+    it("doesn't modify outer variables on variable name collisions", () => {
+      var env = {"abc": 3};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
+      ]}, env)();
+      expect(env["abc"]).to.deep.equal(3);
+    });
   });
 });
