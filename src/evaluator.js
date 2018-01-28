@@ -57,7 +57,11 @@ _specialForms["while"] = function(args, env) {
 };
 
 _specialForms["do"] = function(args, env) {
-  var value = false;
+  if (args.length === 0) {
+    throw new SyntaxError("Do requires at least one argument");
+  }
+
+  var value;
   args.forEach(function(arg) {
     value = _evaluate(arg, env);
   });

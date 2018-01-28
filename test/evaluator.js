@@ -110,19 +110,49 @@ describe("Evaluator", () => {
     });
   });
 
+  describe("Do", () => {
+    it("requires at least one expression", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: []})).to.throw(SyntaxError);
+    });
+    it("evaluates all expressions", () => {
+      var env = {};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "value", value: 3}]}
+      ]}, env);
+      expect(env["abc"]).to.deep.equal(5);
+      expect(env["def"]).to.deep.equal(3);
+    });
+    it("evaluates to the last expression", () => {
+      expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
+        {type: "value", value: 5},
+        {type: "value", value: 3},
+      ]})).to.deep.equal(3);
+    });
+  });
+
   describe("If", () => {
+    it("requires two expressions", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: false}, {type: "value", value: 5}]})).to.throw(SyntaxError);
+    });
     it("evaluates the first expression when true", () => {
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: true}, {type: "value", value: 5}, {type: "value", value: -5}]})).to.deep.equal(5);
     });
     it("evaluates the second expression when false", () => {
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: false}, {type: "value", value: 5}, {type: "value", value: -5}]})).to.deep.equal(-5);
     });
-    it("requires two expressions", () => {
-      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "if"}, args: [{type: "value", value: false}, {type: "value", value: 5}]})).to.throw(SyntaxError);
-    });
   });
 
   describe("While", () => {
+    it("requires a body", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false}]})).to.throw(SyntaxError);
+    });
+    it("doesn't take multiple bodies", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "value", value: -5}]}]}))
+        .to.throw(SyntaxError);
+    });
     it("doesn't evaluate the body when false", () => {
       var env = {};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false},
@@ -150,15 +180,6 @@ describe("Evaluator", () => {
 
       expect(env["count"]).to.deep.equal(0);
       expect(env["sum"]).to.deep.equal(15);
-    });
-    it("requires a body", () => {
-      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false}]})).to.throw(SyntaxError);
-    });
-    it("doesn't take multiple bodies", () => {
-      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "value", value: false},
-        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
-        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "value", value: -5}]}]}))
-        .to.throw(SyntaxError);
     });
   });
 });
