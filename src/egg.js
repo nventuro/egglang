@@ -47,7 +47,9 @@ function doREPL() {
   rl.prompt();
 }
 
-function runFile(filename) {
+function runFile(filename, env) {
   var program = fs.readFileSync(filename, "utf8");
-  runtime.run(program);
+  return runtime.run(program, env);
 }
+
+exports._runFile = runFile;
