@@ -61,54 +61,54 @@ describe("Parser", () => {
       expect(() => parser.parse("()")).to.throw(SyntaxError);
     });
     it("parses applications with no parameters", () => {
-      expect(parser.parse("abc()")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: []});
+      expect(parser.parse("abc()")).to.deep.equal({type: "apply", operator: {type: "word", name: "abc"}, args: []});
     });
     it("parses applications with different types of parameters", () => {
-      expect(parser.parse("abc(\"param\", 3, var)")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: [{type: "value", value: "param"}, {type: "value", value: 3}, {type: "word", "name": "var"}]});
+      expect(parser.parse("abc(\"param\", 3, var)")).to.deep.equal({type: "apply", operator: {type: "word", name: "abc"}, args: [{type: "value", value: "param"}, {type: "value", value: 3}, {type: "word", name: "var"}]});
     });
     it("parses nested applications", () => {
-      expect(parser.parse("abc(def())")).to.deep.equal({type: "apply", operator: {type: "word", "name": "abc"}, args: [{type: "apply", operator: {type: "word", "name": "def"}, args: []}]});
+      expect(parser.parse("abc(def())")).to.deep.equal({type: "apply", operator: {type: "word", name: "abc"}, args: [{type: "apply", operator: {type: "word", name: "def"}, args: []}]});
     });
     it("parses applied applications", () => {
       expect(parser.parse("abc()()")).to.deep.equal({type: "apply", operator: {type: "apply", operator: {type: "word", name: "abc"}, args: []}, args: []});
     });
   });
-});
 
-describe("Ignored characters remover", () => {
-  describe("Whitespace remover", () => {
-    it("removes empty lines", () => {
-      expect(parser._removeIgnored("   ")).to.deep.equal("");
+  describe("Ignored characters remover", () => {
+    describe("Whitespace remover", () => {
+      it("removes empty lines", () => {
+        expect(parser._removeIgnored("   ")).to.deep.equal("");
+      });
+      it("removes leading whitespace", () => {
+        expect(parser._removeIgnored("   abc")).to.deep.equal("abc");
+      });
+      it("removes trailing whitespace", () => {
+        expect(parser._removeIgnored("abc   ")).to.deep.equal("abc");
+      });
+      it("removes middle whitespace", () => {
+        expect(parser._removeIgnored("ab    c")).to.deep.equal("abc");
+      });
+      it("removes newlines", () => {
+        expect(parser._removeIgnored("ab\nc")).to.deep.equal("abc");
+      });
+      it("removes all whitespace characters", () => {
+        expect(parser._removeIgnored("\n   ab \n  c   \n")).to.deep.equal("abc");
+      });
     });
-    it("removes leading whitespace", () => {
-      expect(parser._removeIgnored("   abc")).to.deep.equal("abc");
-    });
-    it("removes trailing whitespace", () => {
-      expect(parser._removeIgnored("abc   ")).to.deep.equal("abc");
-    });
-    it("removes middle whitespace", () => {
-      expect(parser._removeIgnored("ab    c")).to.deep.equal("abc");
-    });
-    it("removes newlines", () => {
-      expect(parser._removeIgnored("ab\nc")).to.deep.equal("abc");
-    });
-    it("removes all whitespace characters", () => {
-      expect(parser._removeIgnored("\n   ab \n  c   \n")).to.deep.equal("abc");
-    });
-  });
 
-  describe("Comments remover", () => {
-    it("removes trailing comments", () => {
-      expect(parser._removeIgnored("abc#comment")).to.deep.equal("abc");
-    });
-    it("removes nested comments", () => {
-      expect(parser._removeIgnored("abc#comment#abc")).to.deep.equal("abc");
-    });
-    it("removes comment lines", () => {
-      expect(parser._removeIgnored("#comment")).to.deep.equal("");
-    });
-    it("removes multiline comments", () => {
-      expect(parser._removeIgnored("#comment1\n#comment2")).to.deep.equal("");
+    describe("Comments remover", () => {
+      it("removes trailing comments", () => {
+        expect(parser._removeIgnored("abc#comment")).to.deep.equal("abc");
+      });
+      it("removes nested comments", () => {
+        expect(parser._removeIgnored("abc#comment#abc")).to.deep.equal("abc");
+      });
+      it("removes comment lines", () => {
+        expect(parser._removeIgnored("#comment")).to.deep.equal("");
+      });
+      it("removes multiline comments", () => {
+        expect(parser._removeIgnored("#comment1\n#comment2")).to.deep.equal("");
+      });
     });
   });
 });

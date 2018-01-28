@@ -1,5 +1,3 @@
-exports.evaluate = _evaluate;
-
 function _evaluate(expr, env) {
   switch(expr.type) {
     case "value":
@@ -116,3 +114,5 @@ function _isTrue(expr, env) {
   // Must be false: 0, empty string, etc. do not evaluate as false
   return _evaluate(expr, env) !== false;
 }
+
+exports.evaluate = _evaluate;
