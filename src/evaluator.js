@@ -82,6 +82,30 @@ _specialForms["define"] = function(args, env) {
   return value;
 };
 
+_specialForms["set"] = function(args, env) {
+  if (args.length !== 2 || args[0].type !== "word") {
+    throw new SyntaxError("Bad use of set");
+  }
+
+  var name = args[0].name;
+
+  // Loop over the outer environments, until we find one that has the
+  // required variable
+  var outer_env = env;
+  while (!Object.prototype.hasOwnProperty.call(outer_env, name)) {
+    outer_env = Object.getPrototypeOf(outer_env);
+    if (outer_env === null) {
+      throw new ReferenceError("Setting non-existent variable");
+    }
+  }
+
+  var value = _evaluate(args[1], env);
+  outer_env[name] = value;
+
+  // define evaluates to the assigned value
+  return value;
+};
+
 _specialForms["fun"] = function(args, env) {
   if (!args.length) {
     throw new SyntaxError("Functions need a body");

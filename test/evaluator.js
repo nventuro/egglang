@@ -231,12 +231,37 @@ describe("Evaluator", () => {
       ]}, env)();
       expect(env).not.to.have.property("abc");
     });
-    it("doesn't modify outer variables on variable name collisions", () => {
+    it("doesn't modify outer variables on name collisions", () => {
       var env = {"abc": 3};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
         {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
       ]}, env)();
       expect(env["abc"]).to.deep.equal(3);
+    });
+  });
+
+  describe("Set", () => {
+    it("takes only one variable", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "word", name: "def"}, {type: "value", value: 5}]})).to.throw(SyntaxError);
+    });
+    it("takes only one value", () => {
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}, {type: "value", value: 3}]})).to.throw(SyntaxError);
+    });
+    it("requires the variable to exist", () => {
+      var env = {};
+      expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}, env)).to.throw(ReferenceError);
+    });
+    it("takes variables as values", () => {
+      var env = {"abc": 5, "def": 3};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "def"}, {type: "word", name: "abc"}]}, env);
+      expect(env["def"]).to.deep.equal(5);
+    });
+    it("modifies outer environment variables", () => {
+      var env = {"abc": 3};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
+        {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
+      ]}, env)();
+      expect(env["abc"]).to.deep.equal(5);
     });
   });
 });
