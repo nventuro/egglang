@@ -1,9 +1,9 @@
-const runtime = require("./runtime.js");
+const runtime = require("./runtime");
 const readline = require("readline");
 const fs = require("fs");
 
 if (require.main === module) {
-  var args = process.argv.slice(2); // Remove the Node call to this program from argv
+  let args = process.argv.slice(2); // Remove the Node call to this program from argv
 
   if (args.length === 0) {
     doREPL();
@@ -19,7 +19,7 @@ if (require.main === module) {
 function doREPL() {
   // To implement a REPL, we need an environment that
   // will persist through multiple runtime.run calls
-  var replEnv = runtime.newEnv();
+  let replEnv = runtime.newEnv();
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -48,7 +48,7 @@ function doREPL() {
 }
 
 function runFile(filename, env) {
-  var program = fs.readFileSync(filename, "utf8");
+  let program = fs.readFileSync(filename, "utf8");
   return runtime.run(program, env);
 }
 

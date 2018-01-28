@@ -1,5 +1,5 @@
-const parser = require("./parser.js");
-const evaluator = require("./evaluator.js");
+const parser = require("./parser");
+const evaluator = require("./evaluator");
 
 exports.run = _run;
 exports.newEnv = _newEnv;
@@ -13,7 +13,7 @@ function _newEnv() {
   return Object.create(_topEnv);
 }
 
-var _topEnv = Object.create(null);
+let _topEnv = Object.create(null);
 
 // Boolean values (stored as variables)
 _topEnv["true"] = true;

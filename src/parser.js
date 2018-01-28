@@ -2,7 +2,7 @@ function _parse(program) {
   program = _removeIgnored(program);
 
   // The program must be composed of a single expression
-  var result = _parseExpression(program);
+  let result = _parseExpression(program);
 
   if (result.rest.length > 0) {
     throw new SyntaxError("Unexpected text after program");
@@ -12,7 +12,7 @@ function _parse(program) {
 }
 
 function _parseExpression(program) {
-  var matchers = [
+  let matchers = [
     {
       // Literal strings:
       //  * No escape charaters
@@ -33,7 +33,7 @@ function _parseExpression(program) {
     }
   ];
 
-  var expr, match;
+  let expr, match;
   matchers.some((matcher) => {
     match = matcher.regex.exec(program);
     if (match) {
@@ -60,7 +60,7 @@ function _parseApply(expr, program) {
   expr = {type: "apply", operator: expr, args: []};
 
   while (program[0] !== ")") {
-    var arg = _parseExpression(program); // Recursively parse each argument
+    let arg = _parseExpression(program); // Recursively parse each argument
     expr.args.push(arg.expr);
     program = arg.rest;
 

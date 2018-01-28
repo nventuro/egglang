@@ -1,9 +1,9 @@
-const egg = require("../src/egg.js");
-const runtime = require("../src/runtime.js");
+const egg = require("../src/egg");
+const runtime = require("../src/runtime");
 const expect = require("chai").expect;
 
 describe("Samples", () => {
-  var envNoPrint;
+  let envNoPrint;
   beforeEach(() => {
     envNoPrint = runtime.newEnv();
     envNoPrint["print"] = (val) => val;

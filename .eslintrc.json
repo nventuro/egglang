@@ -7,6 +7,8 @@
     "extends": "eslint:recommended",
     "rules": {
         "key-spacing": ["error"],
+        "curly": ["error"],
+        "no-var": ["error"],
         "computed-property-spacing": ["error"],
         "no-whitespace-before-property": ["error"],
         "space-before-blocks": ["error"],
