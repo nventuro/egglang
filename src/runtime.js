@@ -20,7 +20,7 @@ _topEnv["true"] = true;
 _topEnv["false"] = false;
 
 // Standard binary operators
-["+", "-", "*", "/", "==", "<", ">"].forEach(function(op) {
+["+", "-", "*", "/", "==", "!=", "<", "<=", ">", ">="].forEach(function(op) {
   _topEnv[op] = new Function("a, b", "return a " + op + " b;");
 });
 

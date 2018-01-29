@@ -72,6 +72,26 @@ describe("Runtime", () => {
         expect(runtime.newEnv()["=="](true, false)).to.be.false;
       });
     });
+    describe("!=", () => {
+      it("works with equal integers", () => {
+        expect(runtime.newEnv()["!="](10, 10)).to.be.false;
+      });
+      it("works with different integers", () => {
+        expect(runtime.newEnv()["!="](-10, 10)).to.be.true;
+      });
+      it("works with equal strings", () => {
+        expect(runtime.newEnv()["!="]("abc", "abc")).to.be.false;
+      });
+      it("works with different strings", () => {
+        expect(runtime.newEnv()["!="]("abc", "def")).to.be.true;
+      });
+      it("works with equal booleans", () => {
+        expect(runtime.newEnv()["!="](true, true)).to.be.false;
+      });
+      it("works with different booleans", () => {
+        expect(runtime.newEnv()["!="](true, false)).to.be.true;
+      });
+    });
     describe("<", () => {
       it("works with positive integers", () => {
         expect(runtime.newEnv()["<"](10, 5)).to.be.false;
@@ -80,12 +100,41 @@ describe("Runtime", () => {
         expect(runtime.newEnv()["<"](-10, 5)).to.be.true;
       });
     });
+    describe("<=", () => {
+      it("works with equal positive integers", () => {
+        expect(runtime.newEnv()["<="](10, 10)).to.be.true;
+      });
+      it("works with different positive integers", () => {
+        expect(runtime.newEnv()["<="](10, 5)).to.be.false;
+      });
+      it("works with equal negative integers", () => {
+        expect(runtime.newEnv()["<="](-10, -10)).to.be.true;
+      });
+      it("works with different negative integers", () => {
+        expect(runtime.newEnv()["<="](10, -5)).to.be.false;
+      });
+    });
     describe(">", () => {
       it("works with positive integers", () => {
         expect(runtime.newEnv()[">"](10, 5)).to.be.true;
       });
       it("works with negative integers", () => {
         expect(runtime.newEnv()[">"](-10, 5)).to.be.false;
+      });
+
+    });
+    describe(">=", () => {
+      it("works with equal positive integers", () => {
+        expect(runtime.newEnv()[">="](10, 10)).to.be.true;
+      });
+      it("works with different positive integers", () => {
+        expect(runtime.newEnv()[">="](5, 10)).to.be.false;
+      });
+      it("works with equal negative integers", () => {
+        expect(runtime.newEnv()[">="](-10, -10)).to.be.true;
+      });
+      it("works with different negative integers", () => {
+        expect(runtime.newEnv()[">="](-10, 5)).to.be.false;
       });
     });
   });
