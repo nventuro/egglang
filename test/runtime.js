@@ -138,4 +138,49 @@ describe("Runtime", () => {
       });
     });
   });
+
+  describe("Special funcions", () => {
+    describe.skip("Array", () => {
+      describe("Constructor", () => {
+        it("creates empty arrays", () => {
+          expect(runtime.newEnv()["array"]()).to.deep.equal([]);
+        });
+        it("creates arrays with different kinds of elements", () => {
+          expect(runtime.newEnv()["array"](5, -10, "abc", false)).to.deep.equal([5, -10, "abc", false]);
+        });
+        it("creates nested arrays", () => {
+          let arr = runtime.newEnv()["array"];
+          expect(arr(arr(1, 2, 3), arr("abc", "def", "efg"), arr(true, false, true))).to.deep.equal([[1, 2, 3], ["abc", "def", "efg"], [true, false, true]]);
+        });
+      });
+      describe("Length", () => {
+        it("calculates the length of empty arrays", () => {
+          let env = runtime.newEnv();
+          expect(env["length"](env["array"]())).to.deep.equal(0);
+        });
+        it("calculates the length of arrays with different kinds of elements", () => {
+          let env = runtime.newEnv();
+          expect(env["length"](env["array"](5, -10, "abc", false))).to.deep.equal(4);
+        });
+        it("calculates the length of nested arrays", () => {
+          let env = runtime.newEnv();
+          expect(env["length"](env["array"](env["array"](1, 2), ["array"]("abc", "def"), ["array"](true, false)))).to.deep.equal(3);
+        });
+      });
+      describe("Element", () => {
+        it("requires the index to be valid", () => {
+          let env = runtime.newEnv();
+          expect(() => env["elem"](env["array"](1, 2, 3), 5)).to.throw(ReferenceError);
+        });
+        it("returns the element at the index", () => {
+          let env = runtime.newEnv();
+          expect(env["elem"](env["array"](1, 2, 3), 2)).to.deep.equal(2);
+        });
+        it("returns the element at the index on nested arrays", () => {
+          let env = runtime.newEnv();
+          expect(env["elem"](env["elem"](env["array"](env["array"](1, 2), ["array"]("abc", "def"), ["array"](true, false))), 2, 1)).to.deep.equal("abc");
+        });
+      });
+    });
+  });
 });
