@@ -33,16 +33,16 @@ describe("Evaluator", () => {
     });
     describe("Boolean", () => {
       it("evaluates true as true", () => {
-        expect(evaluator.evaluate({type: "value", value: true})).to.deep.equal(true);
+        expect(evaluator.evaluate({type: "value", value: true})).to.be.true;
       });
       it("evaluates false as false", () => {
-        expect(evaluator.evaluate({type: "value", value: false})).to.deep.equal(false);
+        expect(evaluator.evaluate({type: "value", value: false})).to.be.false;
       });
       it("doesn't evaluate 0 as false", () => {
-        expect(evaluator.evaluate({type: "value", value: 0})).not.to.deep.equal(false);
+        expect(evaluator.evaluate({type: "value", value: 0})).not.to.be.false;
       });
       it("doesn't evaluate the empty string as false", () => {
-        expect(evaluator.evaluate({type: "value", value: ""})).not.to.deep.equal(false);
+        expect(evaluator.evaluate({type: "value", value: ""})).not.to.be.false;
       });
     });
   });
@@ -81,7 +81,7 @@ describe("Evaluator", () => {
     });
     it("evaluates boolean variables", () => {
       let env = {"abc": true};
-      expect(evaluator.evaluate({type: "word", name: "abc"}, env)).to.deep.equal(true);
+      expect(evaluator.evaluate({type: "word", name: "abc"}, env)).to.be.true;
     });
   });
 
@@ -125,12 +125,12 @@ describe("Evaluator", () => {
       it("stores boolean variables", () => {
         let env = {};
         evaluator.evaluate({type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: true}]}, env);
-        expect(env["abc"]).to.deep.equal(true);
+        expect(env["abc"]).to.be.true;
       });
       it("modifies boolean variables", () => {
         let env = {abc: false};
         evaluator.evaluate({type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: true}]}, env);
-        expect(env["abc"]).to.deep.equal(true);
+        expect(env["abc"]).to.be.true;
       });
     });
   });
