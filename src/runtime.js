@@ -30,3 +30,19 @@ _topEnv["print"] = function(value) {
   // For lack of a meaningful result, print evaluates to the printed value
   return value;
 };
+
+_topEnv["array"] = function() {
+  return Array.prototype.slice.call(arguments);
+};
+
+_topEnv["length"] = function(arr) {
+  return arr.length;
+};
+
+_topEnv["elem"] = function(arr, idx) {
+  if (idx < 0 || idx >= arr.length) {
+    throw new ReferenceError;
+  }
+
+  return arr[idx];
+};

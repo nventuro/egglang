@@ -140,7 +140,7 @@ describe("Runtime", () => {
   });
 
   describe("Special funcions", () => {
-    describe.skip("Array", () => {
+    describe("Array", () => {
       describe("Constructor", () => {
         it("creates empty arrays", () => {
           expect(runtime.newEnv()["array"]()).to.deep.equal([]);
@@ -164,7 +164,7 @@ describe("Runtime", () => {
         });
         it("calculates the length of nested arrays", () => {
           let env = runtime.newEnv();
-          expect(env["length"](env["array"](env["array"](1, 2), ["array"]("abc", "def"), ["array"](true, false)))).to.deep.equal(3);
+          expect(env["length"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)))).to.deep.equal(3);
         });
       });
       describe("Element", () => {
@@ -174,11 +174,11 @@ describe("Runtime", () => {
         });
         it("returns the element at the index", () => {
           let env = runtime.newEnv();
-          expect(env["elem"](env["array"](1, 2, 3), 2)).to.deep.equal(2);
+          expect(env["elem"](env["array"](1, 2, 3), 1)).to.deep.equal(2);
         });
         it("returns the element at the index on nested arrays", () => {
           let env = runtime.newEnv();
-          expect(env["elem"](env["elem"](env["array"](env["array"](1, 2), ["array"]("abc", "def"), ["array"](true, false))), 2, 1)).to.deep.equal("abc");
+          expect(env["elem"](env["elem"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
         });
       });
     });
