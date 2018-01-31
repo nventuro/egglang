@@ -167,18 +167,18 @@ describe("Runtime", () => {
           expect(env["length"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)))).to.deep.equal(3);
         });
       });
-      describe("Element", () => {
+      describe("Get", () => {
         it("requires the index to be valid", () => {
           let env = runtime.newEnv();
-          expect(() => env["elem"](env["array"](1, 2, 3), 5)).to.throw(ReferenceError);
+          expect(() => env["get"](env["array"](1, 2, 3), 5)).to.throw(ReferenceError);
         });
         it("returns the element at the index", () => {
           let env = runtime.newEnv();
-          expect(env["elem"](env["array"](1, 2, 3), 1)).to.deep.equal(2);
+          expect(env["get"](env["array"](1, 2, 3), 1)).to.deep.equal(2);
         });
         it("returns the element at the index on nested arrays", () => {
           let env = runtime.newEnv();
-          expect(env["elem"](env["elem"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
+          expect(env["get"](env["get"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
         });
       });
     });

@@ -39,7 +39,7 @@ _topEnv["length"] = function(arr) {
   return arr.length;
 };
 
-_topEnv["elem"] = function(arr, idx) {
+_topEnv["get"] = function(arr, idx) {
   if (idx < 0 || idx >= arr.length) {
     throw new ReferenceError;
   }

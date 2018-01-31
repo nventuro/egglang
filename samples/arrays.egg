@@ -4,7 +4,7 @@ do(
   define(i, 0),
   define(result, 0),
   while(<(i, length(arr)), do(
-    set(result, +(result, elem(arr, i))),
+    set(result, +(result, get(arr, i))),
     set(i, +(i, 1))
   )),
   print(result)
