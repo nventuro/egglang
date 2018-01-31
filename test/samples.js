@@ -9,6 +9,12 @@ describe("Samples", () => {
     envNoPrint["print"] = (val) => val;
   });
 
+  describe("Arrays sample", () => {
+    it("should return the correct result", () => {
+      expect(egg._runFile("samples/arrays.egg", envNoPrint)).to.deep.equal(55);
+    });
+  });
+
   describe("Closure sample", () => {
     it("should return the correct result", () => {
       expect(egg._runFile("samples/closure.egg", envNoPrint)).to.deep.equal(8);
