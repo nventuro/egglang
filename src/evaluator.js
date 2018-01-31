@@ -53,7 +53,7 @@ _specialForms["while"] = function(args, env) {
   return false;
 };
 
-_specialForms["do"] = function(args, env) {
+_specialForms["do"] = (args, env) => {
   if (args.length === 0) {
     throw new SyntaxError("Do requires at least one argument");
   }
