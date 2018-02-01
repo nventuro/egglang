@@ -148,7 +148,7 @@ describe("Runtime", () => {
   });
 
   describe("Special funcions", () => {
-    describe("Array", () => {
+    describe("array", () => {
       describe("Constructor", () => {
         it("creates empty arrays", () => {
           expect(runtime.newEnv()["array"]()).to.deep.equal([]);
@@ -161,7 +161,7 @@ describe("Runtime", () => {
           expect(arr(arr(1, 2, 3), arr("abc", "def", "ghi"), arr(true, false, true))).to.deep.equal([[1, 2, 3], ["abc", "def", "ghi"], [true, false, true]]);
         });
       });
-      describe("Length", () => {
+      describe("length", () => {
         it("calculates the length of empty arrays", () => {
           let env = runtime.newEnv();
           expect(env["length"](env["array"]())).to.deep.equal(0);
@@ -176,7 +176,7 @@ describe("Runtime", () => {
           expect(env["length"](arr(arr(1, 2), arr("abc", "def"), arr(true, false)))).to.deep.equal(3);
         });
       });
-      describe("Get", () => {
+      describe("get", () => {
         it("requires the index to be valid", () => {
           let env = runtime.newEnv();
           expect(() => env["get"](env["array"](1, 2, 3), 5)).to.throw(ReferenceError);
@@ -190,7 +190,7 @@ describe("Runtime", () => {
           expect(env["get"](env["get"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
         });
       });
-      describe("Push", () => {
+      describe("push", () => {
         it("requires the element to be provided", () => {
           let env = runtime.newEnv();
           expect(() => env["push"](env["array"](1, 2, 3))).to.throw(SyntaxError);
@@ -216,7 +216,7 @@ describe("Runtime", () => {
       });
     });
 
-    describe("Dict", () => {
+    describe("dict", () => {
       describe("Constructor", () => {
         it("creates empty dicts", () => {
           expect(runtime.newEnv()["dict"]()).to.deep.equal({});
@@ -232,7 +232,7 @@ describe("Runtime", () => {
           expect(dict(1, dict(1, 2, 3, 4), "abc", dict("def", "ghi"), true, dict(true, false))).to.deep.equal({1: {1: 2, 3: 4}, "abc": {"def": "ghi"}, true: {true: false}});
         });
       });
-      describe("Length", () => {
+      describe("length", () => {
         it("calculates the length of empty dicts", () => {
           let env = runtime.newEnv();
           expect(env["length"](env["dict"]())).to.deep.equal(0);
@@ -247,7 +247,7 @@ describe("Runtime", () => {
           expect(env["length"](dict(1, dict(1, 2, 3, 4), "abc", dict("def", "ghi"), true, dict(true, false)))).to.deep.equal(3);
         });
       });
-      describe("Get", () => {
+      describe("get", () => {
         it("requires the key to exist", () => {
           let env = runtime.newEnv();
           expect(() => env["get"](env["dict"](1, 5, 2, 8), 5)).to.throw(ReferenceError);
@@ -262,7 +262,7 @@ describe("Runtime", () => {
           expect(env["get"](env["get"](dict("abc", dict(2, 1, 8, 5), "def", dict("abc", "def"), 8, dict(true, false)), "abc"), 8)).to.deep.equal(5);
         });
       });
-      describe("Push", () => {
+      describe("push", () => {
         it("requires the key value pair to be provided", () => {
           let env = runtime.newEnv();
           expect(() => env["push"](env["dict"](1, 2))).to.throw(SyntaxError);
