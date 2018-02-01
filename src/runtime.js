@@ -51,7 +51,7 @@ _topEnv["dict"] = function() {
 _topEnv["length"] = function(obj) {
   return _typeHandler(obj,
     (arr) => arr.length,
-    (obj) => Object.keys(obj).length
+    (dict) => Object.keys(dict).length
   );
 };
 
@@ -63,23 +63,41 @@ _topEnv["get"] = function(obj, elem) {
       }
       return arr[idx];
     },
-    (obj, prop) => {
-      if (!(prop in obj)) {
-        throw new ReferenceError("Unknown object property");
+    (dict, prop) => {
+      if (!(prop in dict)) {
+        throw new ReferenceError("Unknown dict key");
       }
-      return obj[prop];
+      return dict[prop];
     }, elem);
 };
 
-function _typeHandler(obj, arr_handler, obj_handler) {
+_topEnv["push"] = function(obj, key, value) {
+  _typeHandler(obj,
+    (arr, elem) => { // For arrays, 'key' will be the pushed value
+      if (arguments.length !== 2) {
+        throw new SyntaxError("Can only push one element to array");
+      }
+      arr.push(elem);
+    },
+    (obj, key, value) => {
+      if (arguments.length !== 3) {
+        throw new SyntaxError("Can only push key-value pairs to dict");
+      }
+      obj[key] = value;
+    }, key, value);
+
+  return obj;
+};
+
+function _typeHandler(obj, arr_handler, dict_handler) {
   let args = [].slice.call(arguments).slice(3); // Remaining arguments
   args.unshift(obj); // The object is always the first argument
 
   if (obj instanceof Array) {
     return arr_handler.apply(null, args);
   } else if (obj instanceof Object) {
-    return obj_handler.apply(null, args);
+    return dict_handler.apply(null, args);
   } else {
-    throw new TypeError("Can only call on dicts or arrays");
+    throw new TypeError("Can only call on arrays or dicts");
   }
 }

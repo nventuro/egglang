@@ -182,6 +182,30 @@ describe("Runtime", () => {
           expect(env["get"](env["get"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
         });
       });
+      describe("Push", () => {
+        it("requires the element to be provided", () => {
+          let env = runtime.newEnv();
+          expect(() => env["push"](env["array"](1, 2, 3))).to.throw(SyntaxError);
+        });
+        it("doesn't take more than one element", () => {
+          let env = runtime.newEnv();
+          expect(() => env["push"](env["array"](1, 2, 3), 4, 5)).to.throw(SyntaxError);
+        });
+        it("returns a modified array", () => {
+          let env = runtime.newEnv();
+          expect(env["push"](env["array"](1, 2, 3), 4)).to.deep.equal([1, 2, 3, 4]);
+        });
+        it("modifies the original array", () => {
+          let env = runtime.newEnv();
+          env["arr"] = env["array"](1, 2, 3);
+          env["push"](env["arr"], 4);
+          expect(env["arr"]).to.deep.equal([1, 2, 3, 4]);
+        });
+        it("can create nested arrays", () => {
+          let env = runtime.newEnv();
+          expect(env["push"](env["array"](1, 2, 3), env["array"](4, 5, 6))).to.deep.equal([1, 2, 3, [4, 5, 6]]);
+        });
+      });
     });
 
     describe("Dict", () => {
@@ -216,18 +240,38 @@ describe("Runtime", () => {
         });
       });
       describe("Get", () => {
-        it("requires the property to exist", () => {
+        it("requires the key to exist", () => {
           let env = runtime.newEnv();
           expect(() => env["get"](env["dict"](1, 5, 2, 8), 5)).to.throw(ReferenceError);
         });
-        it("returns the property value", () => {
+        it("returns the associated value", () => {
           let env = runtime.newEnv();
           expect(env["get"](env["dict"]("abc", 1, 2, "def"), 2)).to.deep.equal("def");
         });
-        it("returns the property value on nested dicts", () => {
+        it("returns the associated value on nested dicts", () => {
           let env = runtime.newEnv();
           let dict = env["dict"];
           expect(env["get"](env["get"](dict("abc", dict(2, 1, 8, 5), "def", dict("abc", "def"), 8, dict(true, false)), "abc"), 8)).to.deep.equal(5);
+        });
+      });
+      describe("Push", () => {
+        it("requires the key value pair to be provided", () => {
+          let env = runtime.newEnv();
+          expect(() => env["push"](env["dict"](1, 2))).to.throw(SyntaxError);
+        });
+        it("returns a modified dict", () => {
+          let env = runtime.newEnv();
+          expect(env["push"](env["dict"](1, 2), 3, 4)).to.deep.equal({1: 2, 3: 4});
+        });
+        it("modifies the original dict", () => {
+          let env = runtime.newEnv();
+          env["di"] = env["dict"](1, 2);
+          env["push"](env["di"], 3, 4);
+          expect(env["di"]).to.deep.equal({1: 2, 3: 4});
+        });
+        it("can create nested dicts", () => {
+          let env = runtime.newEnv();
+          expect(env["push"](env["dict"](1, 2), 3, env["dict"](4, 5))).to.deep.equal({1: 2, 3: {4: 5}});
         });
       });
     });
