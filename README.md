@@ -207,7 +207,7 @@ Dictionaries are created by calling `dict` with an even number of arguments (non
 ```
 
 ### Modules
-Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads en Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [https://github.com/nventuro/egglang/tree/master/modules](modules directory).
+Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads en Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [modules directory](https://github.com/nventuro/egglang/tree/master/modules).
 
 ```
 # is_even.egg
