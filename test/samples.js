@@ -9,9 +9,15 @@ describe("Samples", () => {
     envNoPrint["print"] = (val) => val;
   });
 
-  describe("Arrays sample", () => {
+  describe("Array sample", () => {
     it("should return the correct result", () => {
-      expect(egg._runFile("samples/arrays.egg", envNoPrint)).to.deep.equal(55);
+      expect(egg._runFile("samples/array.egg", envNoPrint)).to.deep.equal(55);
+    });
+  });
+
+  describe("Dict sample", () => {
+    it("should return the correct result", () => {
+      expect(egg._runFile("samples/dict.egg", envNoPrint)).to.deep.equal({"even": [0, 2, 4, 6, 8], "odd": [1, 3, 5, 7, 9]});
     });
   });
 
