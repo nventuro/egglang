@@ -8,10 +8,18 @@ dict(
         set(i, +(i, 1))
       )),
 
-      set(result, result)
+      result
   ))),
 
   "avg", define(avg, fun(arr, do(
     /(sum(arr), length(arr))
-  )))
+  ))),
+
+  "is_even", define(is_even, fun(x,
+    ==(%(x, 2), 0)
+  )),
+
+  "is_odd", define(is_odd, fun(x,
+    if(is_even(x), false, true)
+  ))
 )

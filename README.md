@@ -31,7 +31,7 @@ Next, build the project dependencies:
 
 `$ npm install`
 
-To make sure everything is set up correctly, it would be a good idea to run all tests at this point and verify that they finish successfully: 
+To make sure everything is set up correctly, it would be a good idea to run all tests at this point and verify that they finish successfully:
 
 `$ npm test`
 
@@ -123,7 +123,7 @@ A program composed of a single expression is quite limiting, but this becomes a 
 7
 ```
 
-If a particular value wants to be 'returned' from a `do` expression (such as at the end of a function), an useful trick is to `set` it to itself.
+If a particular value wants to be 'returned' from a `do` expression (such as at the end of a function), that value can simply be evaluated at the end.
 
 ### Conditionals
 The standard `if` keyword is supported by Egg, but its meaning is slightly different. Since `if` is also an expression, it's actually closer to C's ternary operator (`?:`), and like in C, both the taken and not-taken branches are required. `if` evaluates to the value of the branch that ends up being evaluated.
@@ -136,18 +136,18 @@ The standard `if` keyword is supported by Egg, but its meaning is slightly diffe
 2
 
 > define(a, 2)
-> if(==(a, 3), 
+> if(==(a, 3),
     define(a, 4),
     define(a, 5)
   )
 5
-> a 
+> a
 5
 ```
- 
+
 ### Flow control
 The `while` keyword provides the only flow control mechanism, evaluating its body until its condition is false. `do` can be used with `while` to allow more than one expression to be evaluated inside its body.
- 
+
 ```
 > define(i, 0)
 > while(<(i, 10),

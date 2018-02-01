@@ -32,5 +32,28 @@ describe("Modules", () => {
         expect(runtime.run("get(util, \"avg\")(array(-5, 0, 20))", env)).to.deep.equal(5);
       });
     });
+
+    describe("is_even", () => {
+      it("is a function", () => {
+        expect(runtime.run("get(util, \"is_even\")", env)).to.be.a("function");
+      });
+      it("works with even integers", () => {
+        expect(runtime.run("get(util, \"is_even\")(2)", env)).to.deep.equal(true);
+      });
+      it("works with odd integers", () => {
+        expect(runtime.run("get(util, \"is_even\")(3)", env)).to.deep.equal(false);
+      });
+    });
+    describe("odd", () => {
+      it("is a function", () => {
+        expect(runtime.run("get(util, \"is_odd\")", env)).to.be.a("function");
+      });
+      it("works with even integers", () => {
+        expect(runtime.run("get(util, \"is_odd\")(4)", env)).to.deep.equal(false);
+      });
+      it("works with odd integers", () => {
+        expect(runtime.run("get(util, \"is_odd\")(5)", env)).to.deep.equal(true);
+      });
+    });
   });
 });
