@@ -12,10 +12,10 @@ You can check everything is installed correctly by running the following command
 
 ```
 $ node --version
-v8.9.1
+v8.9.4
 
 $ npm --version
-5.5.1
+5.6.0
 ```
 
 ## Build and Test
@@ -44,7 +44,7 @@ $ ./egg.sh samples/modules.egg
 ```
 
 ## Language
-Egg is an expression-oriented language, with each program being a single expression, and uses prefix notation (also called Polish notation). Because of this, it looks somewhat different from regular programming languages.
+Egg is an expression-oriented language, with each program being a single expression, and uses prefix notation (also called Polish notation). Because of this, it looks somewhat different from other popular programming languages.
 
 ### Types
 Egg supports integers (both positive and negative), boolean values, and literal strings (escape characters are not allowed though).
@@ -75,10 +75,12 @@ Egg is a dynamically typed language, and as such type declarations are not requi
 5
 ```
 
-Like everything else in Egg, `define` is also an expression, and evaluates to the assigned value. `set` can also be used to update the value of a `define`d variable. This can be used to make assignments to variables in an outer scope (such as global variables), instead of creating new variables in the local scope (which is `define`'s behavior).
+Like everything else in Egg, `define` is an expression, and evaluates to the assigned value.
+
+`set` can also be used to update the value of a `define`d variable. This can be used to make assignments to variables in an outer scope (such as global variables), instead of creating new variables in the local scope (which is `define`'s behavior).
 
 ### Functions
-Functions are created with the `fun` keyword: its first `n-1` arguments are the function's arguments, with the remaining argument being the function body. A function is evaluated to (returns) its last expression. Functions can be passed as arguemnts and returned from them, and closures can be created.
+Functions are created with the `fun` keyword: its first `n-1` arguments are the function's arguments, with the remaining argument being the function body. A function is evaluated to (returns) its body. Functions can be passed as arguments and returned from them, and closures can be created.
 
 ```
 > define(f, fun(
@@ -112,7 +114,7 @@ ReferenceError: Undefined variable: i
 ```
 
 ### Expression grouping
-A program composed of a single expression is quite limiting, but this becomes a non-issue when using the `do` keyword. It evaluates each of its arguments in order, and is evaluated to the value of the last one. This makes it useful for function bodies and flow control, as will later be demonstrated.
+A program composed of a single expression is quite limiting, but this becomes a non-issue by using the `do` keyword. It evaluates each of its arguments in order, and is evaluated to the value of the last one. This makes it useful for function bodies and flow control, as is shown below.
 
 ```
 > do(
@@ -123,7 +125,18 @@ A program composed of a single expression is quite limiting, but this becomes a 
 7
 ```
 
-If a particular value wants to be 'returned' from a `do` expression (such as at the end of a function), that value can simply be evaluated at the end.
+If a particular value wants to be 'returned' from a `do` expression (such as at the end of a function), that value can simply be evaluated last.
+
+```
+> define(f, fun(do(
+    define(a, 2),
+    define(b, 3),
+    +(a, b),
+    a
+  )))
+> f()
+2
+```
 
 ### Conditionals
 The standard `if` keyword is supported by Egg, but its meaning is slightly different. Since `if` is also an expression, it's actually closer to C's ternary operator (`?:`), and like in C, both the taken and not-taken branches are required. `if` evaluates to the value of the branch that ends up being evaluated.
@@ -146,7 +159,7 @@ The standard `if` keyword is supported by Egg, but its meaning is slightly diffe
 ```
 
 ### Flow control
-The `while` keyword provides the only flow control mechanism, evaluating its body until its condition is false. `do` can be used with `while` to allow more than one expression to be evaluated inside its body.
+The `while` keyword provides the only flow control mechanism, evaluating its body until the condition is false. `do` can be used with `while` to allow more than one expression to be evaluated inside its body.
 
 ```
 > define(i, 0)
@@ -157,12 +170,12 @@ The `while` keyword provides the only flow control mechanism, evaluating its bod
 10
 
 > define(i, 0)
-> define(accum, 1)
+> define(pow, 1)
 > while(<(i, 10), do(
-    set(accum, *(accum, 2)),
+    set(pow, *(pow, 2)),
     set(i, +(i, 1))
   ))
-> accum
+> pow
 1024
 ```
 
@@ -207,7 +220,7 @@ Dictionaries are created by calling `dict` with an even number of arguments (non
 ```
 
 ### Modules
-Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads en Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [modules directory](https://github.com/nventuro/egglang/tree/master/modules).
+Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads an Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [modules directory](https://github.com/nventuro/egglang/tree/master/modules).
 
 ```
 # is_even.egg
