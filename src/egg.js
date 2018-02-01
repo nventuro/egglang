@@ -43,7 +43,7 @@ function doREPL() {
     process.exit(0);
   });
 
-  console.log("Egg 1.0.0\n");
+  console.log("Egg 1.1.0\n");
   rl.prompt();
 }
 
