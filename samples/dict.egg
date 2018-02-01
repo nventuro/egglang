@@ -1,0 +1,10 @@
+do(
+  define(numbers, dict("even", array(), "odd", array())),
+
+  define(i, 0),
+  while(<(i, 10), do(
+    push(get(numbers, if(==(%(i, 2), 0), "even", "odd")), i),
+    set(i, +(i, 1))
+  )),
+  print(numbers)
+)
