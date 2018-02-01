@@ -1,0 +1,13 @@
+do(
+  define(util, import("modules/util.egg")), # util now has the module's contents
+
+  define(ages, dict(
+    "men", array(35, 40, 42),
+    "women", array(38, 41, 44)
+  )),
+
+  print(get(util, "avg")(array( # it's functions can be retrieved using get
+    get(util, "avg")(get(ages, "men")),
+    get(util, "avg")(get(ages, "women")),
+  )))
+)
