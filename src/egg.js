@@ -17,9 +17,9 @@ if (require.main === module) {
 }
 
 function doREPL() {
-  // To implement a REPL, we need an environment that
+  // To implement a REPL, we need a scope that
   // will persist through multiple runtime.run calls
-  let replEnv = runtime.newEnv();
+  let replScope = runtime.newScope();
 
   const rl = readline.createInterface({
     input: process.stdin,
@@ -30,7 +30,7 @@ function doREPL() {
   rl.on("line", (line) => {
     if (/\S/.test(line)) { // Only parse non-empty lines
       try {
-        console.log(runtime.run(line, replEnv));
+        console.log(runtime.run(line, replScope));
       }
       catch (error) {
         console.error(error);
@@ -47,9 +47,9 @@ function doREPL() {
   rl.prompt();
 }
 
-function runFile(filename, env) {
+function runFile(filename, scope) {
   let program = fs.readFileSync(filename, "utf8");
-  return runtime.run(program, env);
+  return runtime.run(program, scope);
 }
 
 exports._runFile = runFile;

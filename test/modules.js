@@ -3,56 +3,56 @@ const expect = require("chai").expect;
 
 describe("Modules", () => {
   describe("Util", () => {
-    let env;
+    let scope;
     beforeEach(() => {
-      env = runtime.newEnv();
-      runtime.run("define(util, import(\"modules/util.egg\"))", env);
+      scope = runtime.newScope();
+      runtime.run("define(util, import(\"modules/util.egg\"))", scope);
     });
 
     describe("sum", () => {
       it("is a function", () => {
-        expect(runtime.run("get(util, \"sum\")", env)).to.be.a("function");
+        expect(runtime.run("get(util, \"sum\")", scope)).to.be.a("function");
       });
       it("requires an array", () => {
-        expect(() => runtime.run("get(util, \"sum\")(5)", env)).to.throw(TypeError);
+        expect(() => runtime.run("get(util, \"sum\")(5)", scope)).to.throw(TypeError);
       });
       it("works with integers", () => {
-        expect(runtime.run("get(util, \"sum\")(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))", env)).to.deep.equal(55);
+        expect(runtime.run("get(util, \"sum\")(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))", scope)).to.deep.equal(55);
       });
     });
 
     describe("avg", () => {
       it("is a function", () => {
-        expect(runtime.run("get(util, \"avg\")", env)).to.be.a("function");
+        expect(runtime.run("get(util, \"avg\")", scope)).to.be.a("function");
       });
       it("requires an array", () => {
-        expect(() => runtime.run("get(util, \"avg\")(5)", env)).to.throw(TypeError);
+        expect(() => runtime.run("get(util, \"avg\")(5)", scope)).to.throw(TypeError);
       });
       it("works with integers", () => {
-        expect(runtime.run("get(util, \"avg\")(array(-5, 0, 20))", env)).to.deep.equal(5);
+        expect(runtime.run("get(util, \"avg\")(array(-5, 0, 20))", scope)).to.deep.equal(5);
       });
     });
 
     describe("is_even", () => {
       it("is a function", () => {
-        expect(runtime.run("get(util, \"is_even\")", env)).to.be.a("function");
+        expect(runtime.run("get(util, \"is_even\")", scope)).to.be.a("function");
       });
       it("works with even integers", () => {
-        expect(runtime.run("get(util, \"is_even\")(2)", env)).to.deep.equal(true);
+        expect(runtime.run("get(util, \"is_even\")(2)", scope)).to.deep.equal(true);
       });
       it("works with odd integers", () => {
-        expect(runtime.run("get(util, \"is_even\")(3)", env)).to.deep.equal(false);
+        expect(runtime.run("get(util, \"is_even\")(3)", scope)).to.deep.equal(false);
       });
     });
     describe("odd", () => {
       it("is a function", () => {
-        expect(runtime.run("get(util, \"is_odd\")", env)).to.be.a("function");
+        expect(runtime.run("get(util, \"is_odd\")", scope)).to.be.a("function");
       });
       it("works with even integers", () => {
-        expect(runtime.run("get(util, \"is_odd\")(4)", env)).to.deep.equal(false);
+        expect(runtime.run("get(util, \"is_odd\")(4)", scope)).to.deep.equal(false);
       });
       it("works with odd integers", () => {
-        expect(runtime.run("get(util, \"is_odd\")(5)", env)).to.deep.equal(true);
+        expect(runtime.run("get(util, \"is_odd\")(5)", scope)).to.deep.equal(true);
       });
     });
   });

@@ -3,45 +3,44 @@ const evaluator = require("./evaluator");
 const fs = require("fs");
 
 exports.run = _run;
-exports.newEnv = _newEnv;
+exports.newScope = _newScope;
 
-function _run(program, env) {
-  env = env || _newEnv();
-  return evaluator.evaluate(parser.parse(program), env);
+function _run(program, scope) {
+  scope = scope || _newScope();
+  return evaluator.evaluate(parser.parse(program), scope);
 }
 
-function _newEnv() {
-  return Object.create(_topEnv);
+function _newScope() {
+  return Object.create(_topScope);
 }
 
-let _topEnv = Object.create(null);
+let _topScope = Object.create(null);
 
 // Boolean values (stored as variables)
-_topEnv["true"] = true;
-_topEnv["false"] = false;
+_topScope["true"] = true;
+_topScope["false"] = false;
 
 // Standard binary operators
 ["+", "-", "*", "/", "%", "==", "!=", "<", "<=", ">", ">="].forEach((op) => {
-  _topEnv[op] = eval(`(a, b) => a ${op} b`);
+  _topScope[op] = eval(`(a, b) => a ${op} b`);
 });
 
-_topEnv["print"] = function(value) {
+_topScope["print"] = function(value) {
   console.log(value);
 
   // For lack of a meaningful result, print evaluates to the printed value
   return value;
 };
 
-_topEnv["import"] = function(filename) {
-  let program = fs.readFileSync(filename, "utf8");
-  return evaluator.evaluate(parser.parse(program), _newEnv());
+_topScope["import"] = function(filename) {
+  return _run(fs.readFileSync(filename, "utf8"));
 };
 
-_topEnv["array"] = function() {
+_topScope["array"] = function() {
   return Array.prototype.slice.call(arguments);
 };
 
-_topEnv["dict"] = function() {
+_topScope["dict"] = function() {
   if (arguments.length % 2 !== 0) {
     throw new SyntaxError("Bad number of args to dict");
   }
@@ -54,14 +53,14 @@ _topEnv["dict"] = function() {
   return dict;
 };
 
-_topEnv["length"] = function(obj) {
+_topScope["length"] = function(obj) {
   return _typeHandler(obj,
     (arr) => arr.length,
     (dict) => Object.keys(dict).length
   );
 };
 
-_topEnv["get"] = function(obj, elem) {
+_topScope["get"] = function(obj, elem) {
   return _typeHandler(obj,
     (arr, idx) => {
       if (typeof idx !== "number" || idx < 0 || idx >= arr.length) {
@@ -77,7 +76,7 @@ _topEnv["get"] = function(obj, elem) {
     }, elem);
 };
 
-_topEnv["push"] = function(obj, key, value) {
+_topScope["push"] = function(obj, key, value) {
   _typeHandler(obj,
     (arr, elem) => { // For arrays, 'key' will be the pushed value
       if (arguments.length !== 2) {
