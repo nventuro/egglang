@@ -52,6 +52,14 @@ describe("Runtime", () => {
         expect(runtime.newEnv()["/"](-10, 5)).to.deep.equal(-2);
       });
     });
+    describe("%", () => {
+      it("works with positive integers", () => {
+        expect(runtime.newEnv()["%"](13, 5)).to.deep.equal(3);
+      });
+      it("works with negative integers", () => {
+        expect(runtime.newEnv()["%"](-9, 5)).to.deep.equal(-4);
+      });
+    });
     describe("==", () => {
       it("works with equal integers", () => {
         expect(runtime.newEnv()["=="](10, 10)).to.be.true;

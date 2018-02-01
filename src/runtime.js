@@ -20,7 +20,7 @@ _topEnv["true"] = true;
 _topEnv["false"] = false;
 
 // Standard binary operators
-["+", "-", "*", "/", "==", "!=", "<", "<=", ">", ">="].forEach((op) => {
+["+", "-", "*", "/", "%", "==", "!=", "<", "<=", ">", ">="].forEach((op) => {
   _topEnv[op] = eval(`(a, b) => a ${op} b`);
 });
 
