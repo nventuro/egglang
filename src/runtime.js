@@ -1,5 +1,6 @@
 const parser = require("./parser");
 const evaluator = require("./evaluator");
+const fs = require("fs");
 
 exports.run = _run;
 exports.newEnv = _newEnv;
@@ -29,6 +30,11 @@ _topEnv["print"] = function(value) {
 
   // For lack of a meaningful result, print evaluates to the printed value
   return value;
+};
+
+_topEnv["import"] = function(filename) {
+  let program = fs.readFileSync(filename, "utf8");
+  return evaluator.evaluate(parser.parse(program), _newEnv());
 };
 
 _topEnv["array"] = function() {
