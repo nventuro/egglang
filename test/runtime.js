@@ -150,7 +150,7 @@ describe("Runtime", () => {
         });
         it("creates nested arrays", () => {
           let arr = runtime.newEnv()["array"];
-          expect(arr(arr(1, 2, 3), arr("abc", "def", "efg"), arr(true, false, true))).to.deep.equal([[1, 2, 3], ["abc", "def", "efg"], [true, false, true]]);
+          expect(arr(arr(1, 2, 3), arr("abc", "def", "ghi"), arr(true, false, true))).to.deep.equal([[1, 2, 3], ["abc", "def", "ghi"], [true, false, true]]);
         });
       });
       describe("Length", () => {
@@ -164,7 +164,8 @@ describe("Runtime", () => {
         });
         it("calculates the length of nested arrays", () => {
           let env = runtime.newEnv();
-          expect(env["length"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)))).to.deep.equal(3);
+          let arr = env["array"];
+          expect(env["length"](arr(arr(1, 2), arr("abc", "def"), arr(true, false)))).to.deep.equal(3);
         });
       });
       describe("Get", () => {
@@ -179,6 +180,54 @@ describe("Runtime", () => {
         it("returns the element at the index on nested arrays", () => {
           let env = runtime.newEnv();
           expect(env["get"](env["get"](env["array"](env["array"](1, 2), env["array"]("abc", "def"), env["array"](true, false)), 1), 0)).to.deep.equal("abc");
+        });
+      });
+    });
+
+    describe("Dict", () => {
+      describe("Constructor", () => {
+        it("creates empty dicts", () => {
+          expect(runtime.newEnv()["dict"]()).to.deep.equal({});
+        });
+        it("requires keys and values", () => {
+          expect(() => runtime.newEnv()["dict"]("key")).to.throw(SyntaxError);
+        });
+        it("creates dicts with different kinds of keys and values", () => {
+          expect(runtime.newEnv()["dict"](5, "abc", "def", false)).to.deep.equal({5: "abc", "def": false});
+        });
+        it("creates nested dicts", () => {
+          let dict = runtime.newEnv()["dict"];
+          expect(dict(1, dict(1, 2, 3, 4), "abc", dict("def", "ghi"), true, dict(true, false))).to.deep.equal({1: {1: 2, 3: 4}, "abc": {"def": "ghi"}, true: {true: false}});
+        });
+      });
+      describe("Length", () => {
+        it("calculates the length of empty dicts", () => {
+          let env = runtime.newEnv();
+          expect(env["length"](env["dict"]())).to.deep.equal(0);
+        });
+        it("calculates the length of arrays with different kinds of elements", () => {
+          let env = runtime.newEnv();
+          expect(env["length"](env["dict"](5, "abc", "def", false))).to.deep.equal(2);
+        });
+        it("calculates the length of nested arrays", () => {
+          let env = runtime.newEnv();
+          let dict = env["dict"];
+          expect(env["length"](dict(1, dict(1, 2, 3, 4), "abc", dict("def", "ghi"), true, dict(true, false)))).to.deep.equal(3);
+        });
+      });
+      describe("Get", () => {
+        it("requires the property to exist", () => {
+          let env = runtime.newEnv();
+          expect(() => env["get"](env["dict"](1, 5, 2, 8), 5)).to.throw(ReferenceError);
+        });
+        it("returns the property value", () => {
+          let env = runtime.newEnv();
+          expect(env["get"](env["dict"]("abc", 1, 2, "def"), 2)).to.deep.equal("def");
+        });
+        it("returns the property value on nested dicts", () => {
+          let env = runtime.newEnv();
+          let dict = env["dict"];
+          expect(env["get"](env["get"](dict("abc", dict(2, 1, 8, 5), "def", dict("abc", "def"), 8, dict(true, false)), "abc"), 8)).to.deep.equal(5);
         });
       });
     });
