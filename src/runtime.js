@@ -49,27 +49,37 @@ _topEnv["dict"] = function() {
 };
 
 _topEnv["length"] = function(obj) {
-  if (obj instanceof Array) {
-    return obj.length;
-  } else if (obj instanceof Object) {
-    return Object.keys(obj).length;
-  } else {
-    throw new TypeError("Can only call length on dicts or arrays");
-  }
+  return _typeHandler(obj,
+    (arr) => arr.length,
+    (obj) => Object.keys(obj).length
+  );
 };
 
-_topEnv["get"] = function(obj, idx) {
-  if (obj instanceof Array) {
-    if (typeof idx !== "number" || idx < 0 || idx >= obj.length) {
-      throw new ReferenceError("Illegal index");
-    }
-  } else if (obj instanceof Object) {
-    if (!(idx in obj)) {
-      throw new ReferenceError("Unknown object property");
-    }
-  } else {
-    throw new TypeError("Can only call get on dicts or arrays");
-  }
-
-  return obj[idx];
+_topEnv["get"] = function(obj, elem) {
+  return _typeHandler(obj,
+    (arr, idx) => {
+      if (typeof idx !== "number" || idx < 0 || idx >= arr.length) {
+        throw new ReferenceError("Illegal index");
+      }
+      return arr[idx];
+    },
+    (obj, prop) => {
+      if (!(prop in obj)) {
+        throw new ReferenceError("Unknown object property");
+      }
+      return obj[prop];
+    }, elem);
 };
+
+function _typeHandler(obj, arr_handler, obj_handler) {
+  let args = [].slice.call(arguments).slice(3); // Remaining arguments
+  args.unshift(obj); // The object is always the first argument
+
+  if (obj instanceof Array) {
+    return arr_handler.apply(null, args);
+  } else if (obj instanceof Object) {
+    return obj_handler.apply(null, args);
+  } else {
+    throw new TypeError("Can only call on dicts or arrays");
+  }
+}
