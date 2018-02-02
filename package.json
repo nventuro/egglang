@@ -5,7 +5,7 @@
   "main": "src/egg.js",
   "scripts": {
     "test": "mocha",
-    "build": "browserify src/egg.js > web/out/egg.browserified.js"
+    "build": "browserify src/runtime.js --s egg_runtime > web/out/egg_runtime.browserified.js"
   },
   "repository": {
     "type": "git",

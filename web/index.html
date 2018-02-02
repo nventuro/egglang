@@ -1,3 +1,30 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
 <html>
-  <body>Hello world!</body>
+<head>
+  <title>Egg</title>
+</head>
+<body>
+  <!-- JS dependencies -->
+  <script
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+        crossorigin="anonymous">
+  </script>
+  <script src="out/egg_runtime.browserified.js"></script>
+
+  <h1>Egg</h1><br>
+  <input id="program" type="text" value=""> <button id="run" type="button">Run</button> <br>
+  <p id="output"></p>
+
+  <script >
+    $(document).ready(() => {
+      $("#run").click(() => {
+        $("#output").html(egg_runtime.run($("#program").val()));
+      });
+    });
+  </script>
+  </script>
+</body>
 </html>

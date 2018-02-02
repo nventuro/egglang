@@ -2,6 +2,8 @@ const runtime = require("./runtime");
 const readline = require("readline");
 const fs = require("fs");
 
+exports.runFile = runFile;
+
 if (require.main === module) {
   let args = process.argv.slice(2); // Remove the Node call to this program from argv
 
@@ -51,5 +53,3 @@ function runFile(filename, scope) {
   let program = fs.readFileSync(filename, "utf8");
   return runtime.run(program, scope);
 }
-
-exports._runFile = runFile;
