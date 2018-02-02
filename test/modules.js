@@ -6,7 +6,7 @@ describe("Modules", () => {
     let scope;
     beforeEach(() => {
       scope = runtime.newScope();
-      runtime.run("define(util, import(\"modules/util.egg\"))", scope);
+      runtime.run(":=(util, import(\"modules/util.egg\"))", scope);
     });
 
     describe("sum", () => {

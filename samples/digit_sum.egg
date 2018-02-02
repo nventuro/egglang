@@ -1,11 +1,11 @@
 # Sums all digits from 0 to 10
 
 do(
-  define(total, 0),
-  define(count, 1),
+  :=(total, 0),
+  :=(count, 1),
 
   while(<(count, 11), do( # Run 10 times
-    set(total, +(total, count)), # Accumulate
-    set(count, +(count, 1)))), # Increase counter
+    =(total, +(total, count)), # Accumulate
+    =(count, +(count, 1)))), # Increase counter
 
   print(total))

@@ -1,8 +1,8 @@
 do(
-  define(adder, fun(a,
+  :=(adder, fun(a,
     fun(b, # Anonymous function
       +(a, b)))), # a is stored inside this function
 
-  define(add_5, adder(5)),
+  :=(add_5, adder(5)),
 
   print(add_5(3)))
