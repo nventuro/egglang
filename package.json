@@ -4,7 +4,8 @@
   "description": "Egg programming language.",
   "main": "src/egg.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "browserify src/egg.js > web/out/egg.browserified.js"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,10 @@
   },
   "homepage": "https://github.com/nventuro/egglang#readme",
   "devDependencies": {
+    "browserify": "^15.2.0",
     "chai": "^4.1.2",
     "mocha": "^5.0.0",
     "mocha-eslint": "^4.1.0"
-  }
+  },
+  "dependencies": {}
 }
