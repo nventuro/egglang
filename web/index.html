@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
 
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Egg</title>
 </head>
 <body>
@@ -14,10 +14,7 @@
   </script>
   <script src="out/egg_runtime.browserified.js"></script>
 
-  <h1>Egg</h1><br>
-  <input id="program" type="text" value=""> <button id="run" type="button">Run</button> <br>
-  <p id="output"></p>
-
+  <!-- Custom JS -->
   <script >
     $(document).ready(() => {
       $("#run").click(() => {
@@ -25,6 +22,18 @@
       });
     });
   </script>
-  </script>
+
+  <div id="workspace">
+    <div id="header">
+      <h1>Egg</h1><br>
+      <button id="run" type="button">Run</button>
+    </div>
+    <div id="editor" style="width: 50%;">
+      <input id="program" type="text" value="">
+    </div>
+    <div id="console">
+      <p id="output"></p>
+    </div>
+  </div>
 </body>
 </html>
