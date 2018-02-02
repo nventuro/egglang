@@ -74,6 +74,12 @@ _specialForms["define"] = function(args, scope) {
     throw new SyntaxError("Bad use of define");
   }
 
+  // define can create variables that already exist in the local scope, as long
+  // as they have been created in an outer scope (and are therefore non-local)
+  if (Object.prototype.hasOwnProperty.call(scope, args[0].name)) {
+    throw new ReferenceError("Attempting to re-define local variable");
+  }
+
   let value = _evaluate(args[1], scope);
   scope[args[0].name] = value;
 

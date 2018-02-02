@@ -77,7 +77,21 @@ Egg is a dynamically typed language, and as such type declarations are not requi
 
 Like everything else in Egg, `define` is an expression, and evaluates to the assigned value.
 
-`set` can also be used to update the value of a `define`d variable. This can be used to make assignments to variables in an outer scope (such as global variables), instead of creating new variables in the local scope (which is `define`'s behavior).
+`set` is used to update the value of a `define`d variable.
+
+```
+> define(a, 2)
+2
+> define(a, 3)
+ReferenceError: Attempting to re-define local variable
+> a
+2
+
+> set(a, 3)
+3
+> a
+3
+```
 
 ### Functions
 Functions are created with the `fun` keyword: its first `n-1` arguments are the function's arguments, with the remaining argument being the function body. A function is evaluated to (returns) its body. Functions can be passed as arguments and returned from them, and closures can be created.
