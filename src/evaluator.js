@@ -58,30 +58,38 @@ _specialForms["do"] = (args, scope) => {
     throw new SyntaxError("Do requires at least one argument");
   }
 
+  // do creates a local scope in which its arguments are evaluated
+  let localScope = Object.create(scope);
   let value;
   args.forEach(function(arg) {
-    value = _evaluate(arg, scope);
+    value = _evaluate(arg, localScope);
   });
 
   // do evaluates to the result of the last expression (usually the program result)
   return value;
 };
 
-_specialForms["define"] = function(args, scope) {
+_specialForms[":="] = function(args, scope) {
   if (args.length !== 2 || args[0].type !== "word") {
-    throw new SyntaxError("Bad use of define");
+    throw new SyntaxError("Bad use of :=");
+  }
+
+  // := can create variables that already exist in the local scope, as long
+  // as they have been created in an outer scope (and are therefore non-local)
+  if (Object.prototype.hasOwnProperty.call(scope, args[0].name)) {
+    throw new ReferenceError("Attempting to re-define local variable");
   }
 
   let value = _evaluate(args[1], scope);
   scope[args[0].name] = value;
 
-  // define evaluates to the assigned value
+  // := evaluates to the assigned value
   return value;
 };
 
-_specialForms["set"] = function(args, scope) {
+_specialForms["="] = function(args, scope) {
   if (args.length !== 2 || args[0].type !== "word") {
-    throw new SyntaxError("Bad use of set");
+    throw new SyntaxError("Bad use of =");
   }
 
   let name = args[0].name;

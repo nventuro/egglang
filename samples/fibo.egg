@@ -1,7 +1,7 @@
 # Prints the 10th digit of the Fibonacci sequence
 
 do(
-  define(fibo, fun(n, # Recursive definition
+  :=(fibo, fun(n, # Recursive definition
     if(<(n, 2),
       n, # fibo(0) == 0, fibo(1) == 1
       +(fibo(-(n, 1)), fibo(-(n, 2)))))), # fibo(n) == fibo(n-1) + fibo(n-2)
