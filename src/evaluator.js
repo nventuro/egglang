@@ -58,9 +58,11 @@ _specialForms["do"] = (args, scope) => {
     throw new SyntaxError("Do requires at least one argument");
   }
 
+  // do creates a local scope in which its arguments are evaluated
+  let localScope = Object.create(scope);
   let value;
   args.forEach(function(arg) {
-    value = _evaluate(arg, scope);
+    value = _evaluate(arg, localScope);
   });
 
   // do evaluates to the result of the last expression (usually the program result)

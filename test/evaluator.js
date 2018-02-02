@@ -139,20 +139,35 @@ describe("Evaluator", () => {
     it("requires at least one expression", () => {
       expect(() => evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: []})).to.throw(SyntaxError);
     });
-    it("evaluates all expressions", () => {
+    it("creates a local scope", () => {
       let scope = {};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
-        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
-        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "def"}, {type: "value", value: 3}]}
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
+      ]}, scope);
+      expect(scope).not.to.have.property("abc");
+    });
+    it("doesn't modify the outer scope on name collisions", () => {
+      let scope = {"abc": 3};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
+        {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
+      ]}, scope);
+      expect(scope["abc"]).to.deep.equal(3);
+    });
+    it("evaluates all expressions", () => {
+      let scope = {"abc": 1, "def": 2};
+      evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
+        {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]},
+        {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "def"}, {type: "value", value: 3}]}
       ]}, scope);
       expect(scope["abc"]).to.deep.equal(5);
       expect(scope["def"]).to.deep.equal(3);
     });
     it("evaluates to the last expression", () => {
+      let scope = {};
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "do"}, args: [
         {type: "value", value: 5},
         {type: "value", value: 3},
-      ]})).to.deep.equal(3);
+      ]}, scope)).to.deep.equal(3);
     });
   });
 
@@ -193,11 +208,11 @@ describe("Evaluator", () => {
       // while (count > 0) {sum += count, count -= 1}
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "while"}, args: [{type: "apply", operator: {type: "word", name: ">"}, args: [{type: "word", name: "count"}, {type: "value", value: 0}]},
         {type: "apply", operator: {type: "word", name: "do"}, args: [
-          {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "sum"}, {type: "apply", operator: {type: "word", name: "+"}, args: [
+          {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "sum"}, {type: "apply", operator: {type: "word", name: "+"}, args: [
             {type: "word", name: "sum"},
             {type: "word", name: "count"}
           ]}]},
-          {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "count"}, {type: "apply", operator: {type: "word", name: "-"}, args: [
+          {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "count"}, {type: "apply", operator: {type: "word", name: "-"}, args: [
             {type: "word", name: "count"},
             {type: "value", value: 1}
           ]}]}
@@ -213,7 +228,7 @@ describe("Evaluator", () => {
       let scope = {};
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "value", value: 5}]}, scope)()).to.deep.equal(5);
     });
-    it("functions can access the scopeironment", () => {
+    it("functions can access the outer scope", () => {
       let scope = {"abc": 5};
       expect(evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "abc"}]}, scope)()).to.deep.equal(5);
     });
@@ -224,14 +239,14 @@ describe("Evaluator", () => {
         {type: "apply", operator: {type: "word", name: "fun"}, args: [{type: "word", name: "x"}]}
       ]}, scope)(5)()).to.deep.equal(5);
     });
-    it("creates a local scopeironment", () => {
+    it("creates a local scope", () => {
       let scope = {};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
         {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
       ]}, scope)();
       expect(scope).not.to.have.property("abc");
     });
-    it("doesn't modify outer variables on name collisions", () => {
+    it("doesn't modify the outer scope on name collisions", () => {
       let scope = {"abc": 3};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
         {type: "apply", operator: {type: "word", name: "define"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}
@@ -256,7 +271,7 @@ describe("Evaluator", () => {
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "def"}, {type: "word", name: "abc"}]}, scope);
       expect(scope["def"]).to.deep.equal(5);
     });
-    it("modifies outer scopeironment variables", () => {
+    it("modifies outer scope variables", () => {
       let scope = {"abc": 3};
       evaluator.evaluate({type: "apply", operator: {type: "word", name: "fun"}, args: [
         {type: "apply", operator: {type: "word", name: "set"}, args: [{type: "word", name: "abc"}, {type: "value", value: 5}]}

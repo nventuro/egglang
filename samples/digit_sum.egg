@@ -5,7 +5,7 @@ do(
   define(count, 1),
 
   while(<(count, 11), do( # Run 10 times
-    define(total, +(total, count)), # Accumulate
-    define(count, +(count, 1)))), # Increase counter
+    set(total, +(total, count)), # Accumulate
+    set(count, +(count, 1)))), # Increase counter
 
   print(total))

@@ -138,6 +138,9 @@ If a particular value wants to be 'returned' from a `do` expression (such as at 
 2
 ```
 
+### Scope
+Both `fun` and `do` create a local scope, in which new variables can be `define`d without having them be created in the outer scope. Outer variables can still be accessed and modified using `set`.
+
 ### Conditionals
 The standard `if` keyword is supported by Egg, but its meaning is slightly different. Since `if` is also an expression, it's actually closer to C's ternary operator (`?:`), and like in C, both the taken and not-taken branches are required. `if` evaluates to the value of the branch that ends up being evaluated.
 
