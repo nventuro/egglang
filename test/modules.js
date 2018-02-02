@@ -2,6 +2,76 @@ const runtime = require("../src/runtime");
 const expect = require("chai").expect;
 
 describe("Modules", () => {
+  describe("Func", () => {
+    let scope;
+    beforeEach(() => {
+      scope = runtime.newScope();
+      runtime.run("define(func, import(\"modules/func.egg\"))", scope);
+    });
+
+    describe("map", () => {
+      beforeEach(() => {
+        runtime.run("define(doubler, fun(x, *(x, 2)))", scope);
+        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+      });
+      it("is a function", () => {
+        expect(runtime.run("get(func, \"map\")", scope)).to.be.a("function");
+      });
+      it("requires an array and a function", () => {
+        expect(() => runtime.run("get(func, \"map\")(5, doubler)", scope)).to.throw(TypeError);
+      });
+      it("returns an array", () => {
+        expect(runtime.run("get(func, \"map\")(a, doubler)", scope)).to.deep.equal([2, 4, 6, 8, 10]);
+      });
+      it("doesn't modify the original array", () => {
+        runtime.run("get(func, \"map\")(a, doubler)", scope);
+        expect(runtime.run("a", scope)).to.deep.equal([1, 2, 3, 4, 5]);
+      });
+    });
+
+    describe("filter", () => {
+      beforeEach(() => {
+        runtime.run("define(is_even, get(import(\"modules/util.egg\"), \"is_even\"))", scope);
+        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+      });
+      it("is a function", () => {
+        expect(runtime.run("get(func, \"filter\")", scope)).to.be.a("function");
+      });
+      it("requires an array and a function", () => {
+        expect(() => runtime.run("get(func, \"filter\")(5, is_even)", scope)).to.throw(TypeError);
+      });
+      it("returns an array", () => {
+        expect(runtime.run("get(func, \"filter\")(a, is_even)", scope)).to.deep.equal([2, 4]);
+      });
+      it("doesn't modify the original array", () => {
+        runtime.run("get(func, \"filter\")(a, is_even)", scope);
+        expect(runtime.run("a", scope)).to.deep.equal([1, 2, 3, 4, 5]);
+      });
+    });
+
+    describe("reduce", () => {
+      beforeEach(() => {
+        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+      });
+      it("is a function", () => {
+        expect(runtime.run("get(func, \"reduce\")", scope)).to.be.a("function");
+      });
+      it("requires an array, a function and a starting value", () => {
+        expect(() => runtime.run("get(func, \"reduce\")(a, +)", scope)).to.throw(TypeError);
+      });
+      it("returns a value", () => {
+        expect(runtime.run("get(func, \"reduce\")(a, +, 0)", scope)).to.deep.equal(15);
+      });
+      it("uses the starting value", () => {
+        expect(runtime.run("get(func, \"reduce\")(a, +, 10)", scope)).to.deep.equal(25);
+      });
+      it("doesn't modify the original array", () => {
+        runtime.run("get(func, \"reduce\")(a, +, 0  )", scope);
+        expect(runtime.run("a", scope)).to.deep.equal([1, 2, 3, 4, 5]);
+      });
+    });
+  });
+
   describe("Util", () => {
     let scope;
     beforeEach(() => {
