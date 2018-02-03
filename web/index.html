@@ -26,12 +26,15 @@
     crossorigin="anonymous">
 
   <!-- Codemirror -->
-  <script src="codemirror/lib/codemirror.js"></script>
-  <script src="codemirror/mode/javascript/javascript.js"></script>
-  <script src="codemirror/addon/edit/closebrackets.js"></script>
-  <script src="codemirror/addon/edit/matchbrackets.js"></script>
-  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-  <link rel="stylesheet" href="codemirror/theme/mbo.css">
+  <script src="cm/lib/codemirror.js"></script>
+  <script src="cm/mode/javascript/javascript.js"></script>
+  <script src="cm/addon/edit/closebrackets.js"></script>
+  <script src="cm/addon/edit/matchbrackets.js"></script>
+  <link rel="stylesheet" href="cm/lib/codemirror.css">
+  <link rel="stylesheet" href="cm/theme/mbo.css">
+
+  <!-- SSK -->
+  <link rel="stylesheet" href="ssk/css/social-share-kit.css" type="text/css">
 
   <!-- egglang -->
   <script src="out/egg_runtime.browserified.js"></script>
@@ -80,11 +83,17 @@
   </style>
 
   <!-- Layout -->
-  <header>
-      <h1 style="text-align: center">Egg</h1>
-    </div>
-  </header>
   <div class="container" style="min-height: 100%">
+    <div class="row align-items-center">
+      <div class="col">
+      </div>
+      <div class="col">
+        <h1 style="text-align: center">Egg</h1>
+      </div>
+      <div class="col">
+        <a href="https://github.com/nventuro/egglang" class="ssk ssk-icon ssk-lg ssk-github"></a>
+      </div>
+    </div>
     <div class="row align-items-center">
       <div class="col">
         <div class="text-center">
@@ -92,7 +101,6 @@
         </div>
       </div>
       <div class="col">
-
       </div>
       <div class="col">
       </div>
