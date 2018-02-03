@@ -6,12 +6,53 @@
   <title>Egg</title>
 </head>
 <body>
-  <!-- CCS -->
+  <!-- JQuery -->
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+    crossorigin="anonymous">
+  </script>
+
+  <!-- Bootstrap -->
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous">
+  </script>
   <link
     rel="stylesheet"
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
+
+  <!-- Codemirror -->
+  <script src="codemirror/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+  <script src="codemirror/mode/javascript/javascript.js"></script>
+  <link rel="stylesheet" href="codemirror/theme/mbo.css">
+
+  <!-- egglang -->
+  <script src="out/egg_runtime.browserified.js"></script>
+
+  <!-- Custom JS -->
+  <script >
+    $(document).ready(() => {
+      let codemirror = CodeMirror.fromTextArea($("#source")[0], {
+        mode: "javascript",
+        theme: "mbo",
+        indentUnit: 2,
+        tabSize: 2,
+        indentWithTabs: false
+      });
+
+      $("#run").click(() => {
+        $("#output").val(egg_runtime.run(codemirror.getValue()));
+      });
+
+    });
+  </script>
+
+  <!-- Custom CCS -->
   <style>
     html, body {
       height: 100%;
@@ -22,28 +63,6 @@
       resize: none;
     }
   </style>
-
-  <!-- JS dependencies -->
-  <script
-    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-    crossorigin="anonymous">
-  </script>
-  <script
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous">
-  </script>
-  <script src="out/egg_runtime.browserified.js"></script>
-
-  <!-- Custom JS -->
-  <script >
-    $(document).ready(() => {
-      $("#run").click(() => {
-        $("#output").val(egg_runtime.run($("#program").val()));
-      });
-    });
-  </script>
 
   <!-- Layout -->
   <header>
@@ -66,13 +85,13 @@
     <div class="row" style="min-height: 100%">
       <div class="col">
         <div class="form-group">
-          <label for="program">Source:</label>
-          <textarea class="form-control" id="program" rows="20"></textarea>
+          <label for="source">Source:</label>
+          <textarea id="source"></textarea>
         </div>
       </div>
       <div class="col">
         <div class="form-group">
-          <label for="program">Output:</label>
+          <label for="output">Output:</label>
           <textarea class="form-control" id="output" rows="20" readonly></textarea>
         </div>
       </div>
