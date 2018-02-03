@@ -6,11 +6,33 @@
   <title>Egg</title>
 </head>
 <body>
+  <!-- CCS -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <style>
+    html, body {
+      height: 100%;
+    }
+
+    textarea {
+      height: 100%;
+      resize: none;
+    }
+  </style>
+
   <!-- JS dependencies -->
   <script
-        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-        crossorigin="anonymous">
+    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+    crossorigin="anonymous">
+  </script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous">
   </script>
   <script src="out/egg_runtime.browserified.js"></script>
 
@@ -18,21 +40,42 @@
   <script >
     $(document).ready(() => {
       $("#run").click(() => {
-        $("#output").html(egg_runtime.run($("#program").val()));
+        $("#output").val(egg_runtime.run($("#program").val()));
       });
     });
   </script>
 
-  <div id="workspace">
-    <div id="header">
-      <h1>Egg</h1><br>
-      <button id="run" type="button">Run</button>
+  <!-- Layout -->
+  <header>
+      <h1 style="text-align: center">Egg</h1>
     </div>
-    <div id="editor" style="width: 50%;">
-      <input id="program" type="text" value="">
+  </header>
+  <div class="container" style="min-height: 100%">
+    <div class="row align-items-center">
+      <div class="col">
+        <div class="text-center">
+          <button id="run" type="button" class="btn btn-primary">Run</button>
+        </div>
+      </div>
+      <div class="col">
+
+      </div>
+      <div class="col">
+      </div>
     </div>
-    <div id="console">
-      <p id="output"></p>
+    <div class="row" style="min-height: 100%">
+      <div class="col">
+        <div class="form-group">
+          <label for="program">Source:</label>
+          <textarea class="form-control" id="program" rows="20"></textarea>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="program">Output:</label>
+          <textarea class="form-control" id="output" rows="20" readonly></textarea>
+        </div>
+      </div>
     </div>
   </div>
 </body>
