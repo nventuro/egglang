@@ -64,10 +64,10 @@ true
 ```
 
 ### Assignment
-Egg is a dynamically typed language, and as such type declarations are not required when creating new variables. This is done using the `define` keyword.
+Egg is a dynamically typed language, and as such type declarations are not required when creating new variables. This is done using the `:=` operator.
 
 ```
-> define(a, 2)
+> :=(a, 2)
 2
 > a
 2
@@ -75,40 +75,54 @@ Egg is a dynamically typed language, and as such type declarations are not requi
 5
 ```
 
-Like everything else in Egg, `define` is an expression, and evaluates to the assigned value.
+Like everything else in Egg, `:=` is an expression, and evaluates to the assigned value.
 
-`set` can also be used to update the value of a `define`d variable. This can be used to make assignments to variables in an outer scope (such as global variables), instead of creating new variables in the local scope (which is `define`'s behavior).
+`=` is used to update the value of a `:=`'d variable, and also evaluates to the assigned value.
+
+```
+> :=(a, 2)
+2
+> :=(a, 3)
+ReferenceError: Attempting to re-define local variable
+> a
+2
+
+> =(a, 3)
+3
+> a
+3
+```
 
 ### Functions
 Functions are created with the `fun` keyword: its first `n-1` arguments are the function's arguments, with the remaining argument being the function body. A function is evaluated to (returns) its body. Functions can be passed as arguments and returned from them, and closures can be created.
 
 ```
-> define(f, fun(
+> :=(f, fun(
     2
   ))
 > f()
 2
 
-> define(g, fun(a,
+> :=(g, fun(a,
     a
   ))
 > g(3)
 3
 
-> define(h, fun(
-    define(i, 2)
+> :=(h, fun(
+    :=(i, 2)
   ))
 > h()
 2
 > i
 ReferenceError: Undefined variable: i
 
-> define(adder, fun(a,
+> :=(adder, fun(a,
     fun(b,
       +(a, b)
     )
   ))
-> define(add_5, adder(5))
+> :=(add_5, adder(5))
 > add_5(3)
 8
 ```
@@ -118,8 +132,8 @@ A program composed of a single expression is quite limiting, but this becomes a 
 
 ```
 > do(
-    define(a, 3),
-    define(b, 4),
+    :=(a, 3),
+    :=(b, 4),
     +(a, b)
   )
 7
@@ -128,15 +142,18 @@ A program composed of a single expression is quite limiting, but this becomes a 
 If a particular value wants to be 'returned' from a `do` expression (such as at the end of a function), that value can simply be evaluated last.
 
 ```
-> define(f, fun(do(
-    define(a, 2),
-    define(b, 3),
+> :=(f, fun(do(
+    :=(a, 2),
+    :=(b, 3),
     +(a, b),
     a
   )))
 > f()
 2
 ```
+
+### Scope
+Both `fun` and `do` create a local scope, in which new variables can be `:=`'d without having them be created in the outer scope. Outer variables can still be accessed and modified using `=`.
 
 ### Conditionals
 The standard `if` keyword is supported by Egg, but its meaning is slightly different. Since `if` is also an expression, it's actually closer to C's ternary operator (`?:`), and like in C, both the taken and not-taken branches are required. `if` evaluates to the value of the branch that ends up being evaluated.
@@ -148,10 +165,10 @@ The standard `if` keyword is supported by Egg, but its meaning is slightly diffe
   )
 2
 
-> define(a, 2)
+> :=(a, 2)
 > if(==(a, 3),
-    define(a, 4),
-    define(a, 5)
+    :=(a, 4),
+    :=(a, 5)
   )
 5
 > a
@@ -162,18 +179,18 @@ The standard `if` keyword is supported by Egg, but its meaning is slightly diffe
 The `while` keyword provides the only flow control mechanism, evaluating its body until the condition is false. `do` can be used with `while` to allow more than one expression to be evaluated inside its body.
 
 ```
-> define(i, 0)
+> :=(i, 0)
 > while(<(i, 10),
-    set(i, +(i, 1))
+    =(i, +(i, 1))
   )
 > i
 10
 
-> define(i, 0)
-> define(pow, 1)
+> :=(i, 0)
+> :=(pow, 1)
 > while(<(i, 10), do(
-    set(pow, *(pow, 2)),
-    set(i, +(i, 1))
+    =(pow, *(pow, 2)),
+    =(i, +(i, 1))
   ))
 > pow
 1024
@@ -191,7 +208,7 @@ There are two kinds of collections in Egg: arrays and dictionaries. Their interf
 Arrays are created by calling `array` with the values to be stored in the array (or none for an empty array). These values can then be retrieved by calling `get` with a zero-based index, and new values can be added at the end of the array by calling `push`. The length of the array is returned by `length`.
 
 ```
-> define(arr, array(1, 2, 3))
+> :=(arr, array(1, 2, 3))
 [1, 2, 3]
 > arr.get(0)
 1
@@ -207,7 +224,7 @@ Arrays are created by calling `array` with the values to be stored in the array 
 Dictionaries are created by calling `dict` with an even number of arguments (none for an empty dictionary): even arguments will be keys, and odd arguments will be values. These values can then be retrieved by calling `get` with an appropiate key, and new key-value pairs can be added by calling `push`. The number of key-value pairs is returned by `length`.
 
 ```
-> define(di, dict(1, 2, 3, "4"))
+> :=(di, dict(1, 2, 3, "4"))
 {1: 2, 3: "4"}
 > arr.get(1)
 2
@@ -228,7 +245,7 @@ fun(x,
   ==(%(x, 2), 0)
 )
 
-> define(is_even, import("is_even.egg"))
+> :=(is_even, import("is_even.egg"))
 > is_even(2)
 true
 
@@ -242,7 +259,7 @@ dict(
   )
 )
 
-> define(parity, import("parity.egg"))
+> :=(parity, import("parity.egg"))
 > get(parity, "is_odd")(5)
 true
 ```

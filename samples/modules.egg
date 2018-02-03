@@ -1,7 +1,7 @@
 do(
-  define(util, import("modules/util.egg")), # util now has the module's contents
+  :=(util, import("modules/util.egg")), # util now has the module's contents
 
-  define(ages, dict(
+  :=(ages, dict(
     "men", array(35, 40, 42),
     "women", array(38, 41, 44)
   )),

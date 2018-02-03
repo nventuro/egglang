@@ -6,13 +6,13 @@ describe("Modules", () => {
     let scope;
     beforeEach(() => {
       scope = runtime.newScope();
-      runtime.run("define(func, import(\"modules/func.egg\"))", scope);
+      runtime.run(":=(func, import(\"modules/func.egg\"))", scope);
     });
 
     describe("map", () => {
       beforeEach(() => {
-        runtime.run("define(doubler, fun(x, *(x, 2)))", scope);
-        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+        runtime.run(":=(doubler, fun(x, *(x, 2)))", scope);
+        runtime.run(":=(a, array(1, 2, 3, 4, 5))", scope);
       });
       it("is a function", () => {
         expect(runtime.run("get(func, \"map\")", scope)).to.be.a("function");
@@ -31,8 +31,8 @@ describe("Modules", () => {
 
     describe("filter", () => {
       beforeEach(() => {
-        runtime.run("define(is_even, get(import(\"modules/util.egg\"), \"is_even\"))", scope);
-        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+        runtime.run(":=(is_even, get(import(\"modules/util.egg\"), \"is_even\"))", scope);
+        runtime.run(":=(a, array(1, 2, 3, 4, 5))", scope);
       });
       it("is a function", () => {
         expect(runtime.run("get(func, \"filter\")", scope)).to.be.a("function");
@@ -51,7 +51,7 @@ describe("Modules", () => {
 
     describe("reduce", () => {
       beforeEach(() => {
-        runtime.run("define(a, array(1, 2, 3, 4, 5))", scope);
+        runtime.run(":=(a, array(1, 2, 3, 4, 5))", scope);
       });
       it("is a function", () => {
         expect(runtime.run("get(func, \"reduce\")", scope)).to.be.a("function");
@@ -76,7 +76,7 @@ describe("Modules", () => {
     let scope;
     beforeEach(() => {
       scope = runtime.newScope();
-      runtime.run("define(util, import(\"modules/util.egg\"))", scope);
+      runtime.run(":=(util, import(\"modules/util.egg\"))", scope);
     });
 
     describe("sum", () => {

@@ -26,7 +26,7 @@ function _parseExpression(program) {
       expr: (match) => {return {type: "value", value: Number(match[0])};}
     }, {
       // Names (variables, functions, keywords):
-      //  * No special characters (parenthesis, comma or double quotes)
+      //  * No special characters (parenthesis, comma, or double quotes)
       //  * Must not start with a number
       regex: /^[^\d(),"][^(),"]*/,
       expr: (match) => {return {type: "word", name: match[0]};}

@@ -1,20 +1,20 @@
 do(
-  define(func, import("modules/func.egg")),
+  :=(func, import("modules/func.egg")),
 
   dict(
-    "sum", define(sum, fun(arr,
+    "sum", :=(sum, fun(arr,
       get(func, "reduce")(arr, +, 0)
     )),
 
-    "avg", define(avg, fun(arr, do(
+    "avg", :=(avg, fun(arr, do(
       /(sum(arr), length(arr))
     ))),
 
-    "is_even", define(is_even, fun(x,
+    "is_even", :=(is_even, fun(x,
       ==(%(x, 2), 0)
     )),
 
-    "is_odd", define(is_odd, fun(x,
+    "is_odd", :=(is_odd, fun(x,
       if(is_even(x), false, true)
     ))
   )
