@@ -1,0 +1,40 @@
+dict(
+  "foreach", :=(foreach, fun(arr, f, do(
+    :=(i, 0),
+
+    while(<(i, length(arr)), do(
+      f(get(arr, i)),
+      =(i, +(i, 1))
+    ))
+  ))),
+
+  "map", :=(map, fun(arr, f, do(
+    :=(result, array()),
+
+    foreach(arr, fun(x, do(
+      push(result, f(x))
+    ))),
+
+    result
+  ))),
+
+  "filter", :=(filter, fun(arr, f, do(
+    :=(result, array()),
+
+    foreach(arr, fun(x, do(
+      if(f(x), push(result, x), 0) # nop on false
+    ))),
+
+    result
+  ))),
+
+  "reduce", :=(reduce, fun(arr, f, init, do(
+    :=(result, init),
+
+    foreach(arr, fun(x, do(
+      =(result, f(x, result))
+    ))),
+
+    result
+  )))
+)

@@ -1,25 +1,21 @@
-dict(
-  "sum", :=(sum, fun(arr, do(
-    :=(i, 0),
-    :=(result, 0),
+do(
+  :=(func, import("modules/func.egg")),
 
-      while(<(i, length(arr)), do(
-        =(result, +(result, get(arr, i))),
-        =(i, +(i, 1))
-      )),
+  dict(
+    "sum", :=(sum, fun(arr,
+      get(func, "reduce")(arr, +, 0)
+    )),
 
-      result
-  ))),
+    "avg", :=(avg, fun(arr, do(
+      /(sum(arr), length(arr))
+    ))),
 
-  "avg", :=(avg, fun(arr, do(
-    /(sum(arr), length(arr))
-  ))),
+    "is_even", :=(is_even, fun(x,
+      ==(%(x, 2), 0)
+    )),
 
-  "is_even", :=(is_even, fun(x,
-    ==(%(x, 2), 0)
-  )),
-
-  "is_odd", :=(is_odd, fun(x,
-    if(is_even(x), false, true)
-  ))
+    "is_odd", :=(is_odd, fun(x,
+      if(is_even(x), false, true)
+    ))
+  )
 )
