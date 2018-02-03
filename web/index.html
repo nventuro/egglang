@@ -27,8 +27,10 @@
 
   <!-- Codemirror -->
   <script src="codemirror/lib/codemirror.js"></script>
-  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
   <script src="codemirror/mode/javascript/javascript.js"></script>
+  <script src="codemirror/addon/edit/closebrackets.js"></script>
+  <script src="codemirror/addon/edit/matchbrackets.js"></script>
+  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="codemirror/theme/mbo.css">
 
   <!-- egglang -->
@@ -37,16 +39,29 @@
   <!-- Custom JS -->
   <script >
     $(document).ready(() => {
-      let codemirror = CodeMirror.fromTextArea($("#source")[0], {
+      let editor = CodeMirror.fromTextArea($("#source")[0], {
+        value: "",
         mode: "javascript",
         theme: "mbo",
         indentUnit: 2,
         tabSize: 2,
-        indentWithTabs: false
+        indentWithTabs: false,
+        lineNumbers: true,
+        autofocus: true,
+        matchBrackets: true,
+        autoCloseBrackets: true
+      });
+
+      let output = CodeMirror.fromTextArea($("#output")[0], {
+        value: "",
+        mode: "javascript",
+        theme: "mbo",
+        lineNumbers: false,
+        readOnly: "nocursor"
       });
 
       $("#run").click(() => {
-        $("#output").val(egg_runtime.run(codemirror.getValue()));
+        output.setValue(String(egg_runtime.run(editor.getValue())));
       });
 
     });
@@ -92,7 +107,7 @@
       <div class="col">
         <div class="form-group">
           <label for="output">Output:</label>
-          <textarea class="form-control" id="output" rows="20" readonly></textarea>
+          <textarea id="output"></textarea>
         </div>
       </div>
     </div>
