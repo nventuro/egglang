@@ -7,23 +7,11 @@
 </head>
 <body>
   <!-- JQuery -->
-  <script
-    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-    crossorigin="anonymous">
-  </script>
+  <script src="lib/jquery-3.3.1.slim.min.js"></script>
 
   <!-- Bootstrap -->
-  <script
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous">
-  </script>
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">
+  <script src="lib/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
 
   <!-- Codemirror -->
   <script src="cm/lib/codemirror.js"></script>
@@ -37,7 +25,7 @@
   <link rel="stylesheet" href="ssk/css/social-share-kit.css" type="text/css">
 
   <!-- egglang -->
-  <script src="out/egg_runtime.browserified.js"></script>
+  <script src="js/out/egg_runtime.browserified.js"></script>
 
   <!-- Custom JS -->
   <script >
@@ -63,6 +51,10 @@
         readOnly: "nocursor"
       });
 
+      [editor, output].forEach((cm) => {
+        cm.setSize(null, "80vh");
+      });
+
       $("#run").click(() => {
         output.setValue(String(egg_runtime.run(editor.getValue())));
       });
@@ -74,38 +66,35 @@
   <style>
     html, body {
       height: 100%;
+      background-color: rgb(40, 40, 40);
+    }
+    
+    h1, label, p {
+      color: rgb(220, 220, 220);
     }
 
-    textarea {
-      height: 100%;
-      resize: none;
+    .btn:hover, .btn:active, .btn.active, .open>.dropdown-toggle.btn {
+      background-color: rgb(90, 90, 90);
     }
   </style>
 
   <!-- Layout -->
-  <div class="container" style="min-height: 100%">
-    <div class="row align-items-center">
-      <div class="col">
-      </div>
-      <div class="col">
-        <h1 style="text-align: center">Egg</h1>
-      </div>
-      <div class="col">
-        <a href="https://github.com/nventuro/egglang" class="ssk ssk-icon ssk-lg ssk-github"></a>
+  <div class="container">
+    <div class="row">
+      <div class="col" style="text-align: center">
+        <h1>Egg</h1>
       </div>
     </div>
-    <div class="row align-items-center">
+    <div class="row">
       <div class="col">
         <div class="text-center">
-          <button id="run" type="button" class="btn btn-primary">Run</button>
+          <button id="run" type="button" class="btn">Run</button>
         </div>
       </div>
       <div class="col">
       </div>
-      <div class="col">
-      </div>
     </div>
-    <div class="row" style="min-height: 100%">
+    <div class="row">
       <div class="col">
         <div class="form-group">
           <label for="source">Source:</label>
@@ -117,6 +106,11 @@
           <label for="output">Output:</label>
           <textarea id="output"></textarea>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <a href="https://github.com/nventuro/egglang" class="ssk ssk-icon ssk-lg ssk-github float-right"></a>
       </div>
     </div>
   </div>

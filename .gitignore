@@ -58,4 +58,4 @@ typings/
 .env
 
 # Browserify output
-web/out/*
+web/js/out/*
