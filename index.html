@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Egg</title>
+</head>
+<body>
+  <!-- JQuery -->
+  <script src="lib/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Bootstrap -->
+  <script src="lib/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Codemirror -->
+  <script src="cm/lib/codemirror.js"></script>
+  <script src="cm/mode/javascript/javascript.js"></script>
+  <script src="cm/addon/edit/closebrackets.js"></script>
+  <script src="cm/addon/edit/matchbrackets.js"></script>
+  <link rel="stylesheet" href="cm/lib/codemirror.css">
+  <link rel="stylesheet" href="cm/theme/mbo.css">
+
+  <!-- SSK -->
+  <link rel="stylesheet" href="ssk/css/social-share-kit.css" type="text/css">
+
+  <!-- egglang -->
+  <script src="js/out/egg_runtime.browserified.js"></script>
+
+  <!-- Custom JS -->
+  <script >
+    $(document).ready(() => {
+      let editor = CodeMirror.fromTextArea($("#source")[0], {
+        value: "",
+        mode: "javascript",
+        theme: "mbo",
+        indentUnit: 2,
+        tabSize: 2,
+        indentWithTabs: false,
+        lineNumbers: true,
+        autofocus: true,
+        matchBrackets: true,
+        autoCloseBrackets: true
+      });
+
+      let output = CodeMirror.fromTextArea($("#output")[0], {
+        value: "",
+        mode: "javascript",
+        theme: "mbo",
+        lineNumbers: false,
+        readOnly: "nocursor"
+      });
+
+      [editor, output].forEach((cm) => {
+        cm.setSize(null, "80vh");
+      });
+
+      $("#run").click(() => {
+        output.setValue(String(egg_runtime.run(editor.getValue())));
+      });
+
+    });
+  </script>
+
+  <!-- Custom CCS -->
+  <style>
+    html, body {
+      height: 100%;
+      background-color: rgb(40, 40, 40);
+    }
+    
+    h1, label, p {
+      color: rgb(220, 220, 220);
+    }
+
+    .btn:hover, .btn:active, .btn.active, .open>.dropdown-toggle.btn {
+      background-color: rgb(90, 90, 90);
+    }
+  </style>
+
+  <!-- Layout -->
+  <div class="container">
+    <div class="row">
+      <div class="col" style="text-align: center">
+        <h1>Egg</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="text-center">
+          <button id="run" type="button" class="btn">Run</button>
+        </div>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="source">Source:</label>
+          <textarea id="source"></textarea>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="output">Output:</label>
+          <textarea id="output"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <a href="https://github.com/nventuro/egglang" class="ssk ssk-icon ssk-lg ssk-github float-right"></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
