@@ -36,7 +36,7 @@ To make sure everything is set up correctly, it would be a good idea to run all 
 `$ npm test`
 
 ## Usage
-Run `egg.sh` to get a REPL, or call it with a `.egg` file to run an Egg program. Sample programs are provided in the [samples directory](https://github.com/nventuro/egglang/tree/master/samples).
+Run `egg.sh` to get a REPL, or call it with a `.egg` file to run an Egg program. Sample programs are provided in the [samples directory](https://github.com/nventuro/egglang/tree/dev/samples).
 
 ```
 $ ./egg.sh samples/modules.egg
@@ -237,7 +237,7 @@ Dictionaries are created by calling `dict` with an even number of arguments (non
 ```
 
 ### Modules
-Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads an Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [modules directory](https://github.com/nventuro/egglang/tree/master/modules).
+Egg supports modules in a similar way as Node.js's `require` works. The `import` keyword loads an Egg program (an expression), evaluates it, and returns that value. Therefore, modules typically consist of single functions or dictionaries, which are then stored by the user in a variable. Standard Egg modules are provided in the [modules directory](https://github.com/nventuro/egglang/tree/dev/modules).
 
 ```
 # is_even.egg
